@@ -1,0 +1,18 @@
+<c-vars field />
+
+<c-inputs.wrapper>
+  <c-slot name="input">
+    <select
+      name="{{ field.name }}"
+      id="{{ field.id_for_label }}"
+      class="input bg-white dark:bg-black"
+      {{
+      attrs
+      }}
+    >
+      {% for value, label in field.field.choices %}
+      <option value="{{ value }}" {% if value in field.value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </c-slot>
+</c-inputs.wrapper>

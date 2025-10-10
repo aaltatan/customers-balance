@@ -1,0 +1,31 @@
+{% load widget_tweaks i18n %}
+
+<c-vars field label input />
+
+<div>
+  {% if label %}
+  <label
+    for="{{ field.id_for_label }}"
+    class="text-neutral-500 text-sm font-semibold first-letter:capitalize block mb-0.5 ps-1"
+    >{{ label }}:</label
+  >
+  {% endif %}
+  <div class="relative">
+    <!-- icon -->
+    {% if slot %}
+    <div class="absolute top-1/2 start-3 -translate-y-1/2 text-neutral-500">{{ slot }}</div>
+    {% endif %}
+    <!--  -->
+    {{ input }}
+    <div>
+      <div>{{ field.errors }}</div>
+      {% if field.errors %}
+      <!--  -->
+      {% for error in field.errors %}
+      <div>{{ error|capfirst }}</div>
+      {% endfor %}
+      <!--  -->
+      {% endif %}
+    </div>
+  </div>
+</div>

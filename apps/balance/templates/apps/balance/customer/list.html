@@ -1,0 +1,129 @@
+{% load i18n %}
+
+<c-layout page_title="{% translate 'Customers Balance' %}">
+  <div class="grid grid-cols-3 gap-4">
+    <div class="col-span-2">
+      <div class="flex items-center flex-col lg:flex-row gap-2 mb-2">
+        <c-forms.container
+          hx-trigger="search"
+          hx-get="{{ index_url }}"
+          hx-target="#{{ container_id }}"
+          hx-include="*[data-htmx-include]"
+          class="w-full"
+          data-htmx-include
+        >
+          <c-inputs.input
+            :field="search_filterset.form.q"
+            label="{% translate 'search' %}"
+            placeholder="{% translate 'search' %}"
+            type="search"
+          >
+            <c-tablericon.search class="size-6" />
+          </c-inputs.input>
+        </c-forms.container>
+        <c-forms.container
+          hx-trigger="change"
+          hx-get="{{ index_url }}"
+          hx-target="#{{ container_id }}"
+          hx-include="*[data-htmx-include]"
+          class="w-full"
+          data-htmx-include
+        >
+          <c-inputs.select
+            label="{% translate 'order by' %}"
+            :field="ordering_filterset.form.ordering"
+          />
+        </c-forms.container>
+      </div>
+      <div class="grid lg:grid-cols-3 gap-2" id="{{ container_id }}">
+        <c-balance.customer.partial-list />
+      </div>
+    </div>
+    <div class="border border-neutral-200 dark:border-neutral-800 p-4 rounded-md">
+      <h2 class="text-2xl font-semibold tracking-tight mb-4 first-letter:capitalize text-center">
+        {% translate 'filters' %}
+      </h2>
+      <c-forms.container
+        hx-trigger="input, change"
+        hx-get="{{ index_url }}"
+        hx-target="#{{ container_id }}"
+        hx-include="*[data-htmx-include]"
+        class="w-full space-y-2"
+        data-htmx-include
+      >
+        <c-inputs.input
+          label="{% translate 'name' %}"
+          :field="filterset.form.name"
+          placeholder="{% translate 'e.g. Souaad' %}"
+          type="search"
+        />
+        <div class="flex items-center gap-2">
+          <c-inputs.date label="{% translate 'start date' %}" :field="filterset.form.date__gte" />
+          <c-inputs.date label="{% translate 'end date' %}" :field="filterset.form.date__lte" />
+        </div>
+        <c-inputs.select
+          label="{% translate 'include zero net' %}"
+          :field="filterset.form.include_zero_nets"
+        />
+        <div class="flex items-center gap-2">
+          <c-inputs.input
+            label="{% translate 'net from' %}"
+            :field="filterset.form.net__gte"
+            placeholder="{% translate 'e.g. 50,000' %}"
+            x-mask:dynamic="$money($input, '.', ',', 4)"
+          />
+          <c-inputs.input
+            label="{% translate 'net to' %}"
+            :field="filterset.form.net__lte"
+            placeholder="{% translate 'e.g. 100,000' %}"
+            x-mask:dynamic="$money($input, '.', ',', 4)"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          <c-inputs.input
+            label="{% translate 'total debit from' %}"
+            :field="filterset.form.total_debit__gte"
+            placeholder="{% translate 'e.g. 50,000' %}"
+            x-mask:dynamic="$money($input, '.', ',', 4)"
+          />
+          <c-inputs.input
+            label="{% translate 'total debit to' %}"
+            :field="filterset.form.total_debit__lte"
+            placeholder="{% translate 'e.g. 100,000' %}"
+            x-mask:dynamic="$money($input, '.', ',', 4)"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          <c-inputs.input
+            label="{% translate 'total credit from' %}"
+            :field="filterset.form.total_credit__gte"
+            placeholder="{% translate 'e.g. 50,000' %}"
+            x-mask:dynamic="$money($input, '.', ',', 4)"
+          />
+          <c-inputs.input
+            label="{% translate 'total credit to' %}"
+            :field="filterset.form.total_credit__lte"
+            placeholder="{% translate 'e.g. 100,000' %}"
+            x-mask:dynamic="$money($input, '.', ',', 4)"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          <c-inputs.input
+            label="{% translate 'transactions count from' %}"
+            :field="filterset.form.transactions_count__gte"
+            placeholder="{% translate 'e.g. 1' %}"
+            type="number"
+            min="0"
+          />
+          <c-inputs.input
+            label="{% translate 'transactions count to' %}"
+            :field="filterset.form.transactions_count__lte"
+            placeholder="{% translate 'e.g. 100' %}"
+            type="number"
+            min="0"
+          />
+        </div>
+      </c-forms.container>
+    </div>
+  </div>
+</c-layout>

@@ -1,0 +1,25 @@
+{% load i18n %}
+
+<header
+  class="sticky top-2 start-0 z-50 p-4 mb-2 rounded-md bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800"
+>
+  <nav class="flex justify-between items-center">
+    <h1 class="text-xl tracking-tighter font-medium">{% translate 'Customer Balance' %}</h1>
+    <ul class="flex items-center gap-4">
+      <c-spinner />
+      <c-button @click="toggleTheme" title="{% translate 'Toggle Theme' %}">
+        <c-slot name="icon">
+          <div x-show="theme === 'light'">
+            <c-tablericon.sun class="size-6" />
+          </div>
+          <div x-show="theme === 'dark'">
+            <c-tablericon.moon class="size-6" />
+          </div>
+          <div x-show="theme === 'system'">
+            <c-tablericon.brightness class="size-6" />
+          </div>
+        </c-slot>
+      </c-button>
+    </ul>
+  </nav>
+</header>

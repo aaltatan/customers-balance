@@ -1,0 +1,22 @@
+<c-vars page_title="CUSTOMERS BALANCE" />
+
+<!DOCTYPE html>
+<html
+  lang="en"
+  x-data="colorTheme"
+  :class="{ 'dark': isDark }"
+  :style="{ backgroundColor: backgroundColor }"
+  x-cloak
+>
+  <head>
+    <c-head />
+  </head>
+  <body
+    x-data="body('{{ page_title }}')"
+    class="bg-white dark:bg-black text-neutral-900 dark:text-neutral-100 p-2 mx-auto container"
+    hx-indicator="*[data-indicator]"
+  >
+    <c-header />
+    {{ slot }}
+  </body>
+</html>
