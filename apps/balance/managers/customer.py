@@ -31,8 +31,7 @@ class CustomerQueryset(models.QuerySet):
             query &= models.Q(transactions__date__gte=start_date)
         if end_date:
             nearly_day = timezone.timedelta(hours=23, minutes=59, seconds=59)
-            end_date += nearly_day
-            query &= models.Q(transactions__date__lte=end_date)
+            query &= models.Q(transactions__date__lte=end_date + nearly_day)
 
         return self.annotate(
             transactions_count=models.Count(
@@ -50,12 +49,7 @@ class CustomerQueryset(models.QuerySet):
         end_date: timezone.datetime | None = None,
     ):
         qs = self.annotate_totals(start_date=start_date, end_date=end_date)
-
-        if start_date:
-            qs = qs.filter(transactions__date__gte=start_date)
-        if end_date:
-            qs = qs.filter(transactions__date__gte=end_date)
-
+        qs = qs.filter(~models.Q(transactions_count=0))
         return qs
 
     def exclude_zero_net(self):
