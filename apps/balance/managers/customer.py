@@ -9,7 +9,7 @@ from apps.core.dbfields import MoneyField
 
 
 def get_transactions_total_field(
-    fieldname: Literal["debit", "credit"], query: models.Q
+    fieldname: Literal["debit", "credit", "amount"], query: models.Q
 ) -> Coalesce:
     return Coalesce(
         models.Sum(models.F(f"transactions__{fieldname}"), filter=query),
@@ -39,7 +39,7 @@ class CustomerQueryset(models.QuerySet):
             ),
             total_debit=get_transactions_total_field("debit", query),
             total_credit=get_transactions_total_field("credit", query),
-            net=models.F("total_debit") - models.F("total_credit"),
+            net=get_transactions_total_field("amount", query),
         )
 
     def filter_date(
