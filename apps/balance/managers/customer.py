@@ -77,3 +77,6 @@ class CustomerManager(models.Manager):
         end_date: timezone.datetime | None = None,
     ) -> CustomerQueryset:
         return self.get_queryset().filter_date(start_date=start_date, end_date=end_date)
+
+    def exclude_zero_net(self):
+        return self.get_queryset().exclude_zero_net()
