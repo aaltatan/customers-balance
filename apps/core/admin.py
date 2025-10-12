@@ -14,3 +14,11 @@ class ActivityManager(admin.ModelAdmin):
     )
     list_filter = ("user", "content_type")
     search_fields = ("object_id",)
+    readonly_fields = (
+        "user",
+        "kind",
+        "object_id",
+        "data",
+        "content_type",
+        "notes",
+    )
