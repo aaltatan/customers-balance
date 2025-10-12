@@ -30,10 +30,23 @@ def change_transaction(
     )
 
 
-def delete_transaction(user: User, instance: Transaction) -> None:
-    return TransactionService.delete(
-        user, instance, serializer_class=TransactionSerializer
-    )
+@transaction.atomic
+def delete_transaction(
+    user: User, instance: Transaction, permanent: bool = False
+) -> None:
+    data = TransactionSerializer(instance).data
+    instance_pk = instance.pk
+
+    instance.delete(permanent=permanent)
+
+    Activity(
+        user=user,
+        kind=Activity.KindChoices.DELETE,
+        object_id=instance_pk,
+        data=data,
+        content_type=ContentType.objects.get_for_model(Transaction),
+        notes="DELETE PERMANENTLY" if permanent else "DELETE",
+    ).save()
 
 
 @transaction.atomic
