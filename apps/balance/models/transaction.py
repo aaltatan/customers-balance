@@ -105,6 +105,8 @@ class Transaction(AbstractTimestampModel, AbstractSoftDeleteModel):
 
 
 class TransactionSerializer(serializers.ModelSerializer):
+    customer_name = serializers.SerializerMethodField()
+
     def get_customer_name(self, obj: Transaction) -> str:
         return obj.customer.name
 
