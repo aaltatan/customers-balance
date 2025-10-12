@@ -9,10 +9,10 @@ from apps.core.dbfields import MoneyField
 
 
 def get_transactions_total_field(
-    field_name: Literal["debit", "credit"], query: models.Q
+    fieldname: Literal["debit", "credit"], query: models.Q
 ) -> Coalesce:
     return Coalesce(
-        models.Sum(models.F(f"transactions__{field_name}"), filter=query),
+        models.Sum(models.F(f"transactions__{fieldname}"), filter=query),
         0,
         output_field=MoneyField(),
     )
