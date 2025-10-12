@@ -5,7 +5,7 @@ from django.db import models, transaction
 from rest_framework import serializers
 
 from apps.core.models import Activity, User
-from apps.core.protocols import SaverProtocol
+from apps.core.protocols import SaveableProtocol
 from apps.core.utils import get_differences
 
 
@@ -17,7 +17,7 @@ class Service(Generic[ModelType]):
 
     @classmethod
     @transaction.atomic
-    def add(cls, user: User, saver: SaverProtocol[ModelType]) -> ModelType:
+    def add(cls, user: User, saver: SaveableProtocol[ModelType]) -> ModelType:
         instance = saver.save()
         Activity(
             user=user,
@@ -34,7 +34,7 @@ class Service(Generic[ModelType]):
         cls,
         user: User,
         serializer_class: type[serializers.ModelSerializer],
-        saver: SaverProtocol[ModelType],
+        saver: SaveableProtocol[ModelType],
         instance: ModelType,
     ) -> ModelType:
         Model = instance.__class__
