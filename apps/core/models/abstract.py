@@ -25,6 +25,10 @@ class AbstractSoftDeleteModel(models.Model):
     class Meta:
         abstract = True
 
+    def undelete(self):
+        self.is_deleted = False
+        self.save()
+
     def delete(self, using=None, keep_parents=False, permanent=False):
         if permanent:
             super().delete(using=using, keep_parents=keep_parents)
