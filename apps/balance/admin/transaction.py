@@ -1,9 +1,14 @@
 from django.contrib import admin, messages
-from django.db import models
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from ..models import Transaction
+from ..services import (
+    add_transaction,
+    change_transaction,
+    delete_transaction,
+    undelete_transaction,
+)
 
 
 @admin.register(Transaction)
@@ -21,7 +26,7 @@ class TransactionAdmin(admin.ModelAdmin):
     search_fields = ("customer__name", "notes")
     list_per_page = 10
     list_filter = ("is_deleted",)
-    actions = ("undelete",)
+    actions = ("undelete", "permanently_delete")
     readonly_fields = ("created_at", "updated_at", "slug")
     autocomplete_fields = ("customer",)
     fields = (
@@ -39,17 +44,40 @@ class TransactionAdmin(admin.ModelAdmin):
 
         return qs
 
+    def save_model(self, request, obj, form, change):
+        if change:
+            change_transaction(user=request.user, instance=obj, saver=form)
+        else:
+            add_transaction(user=request.user, saver=form)
+
+    def delete_model(self, request, obj):
+        delete_transaction(user=request.user, instance=obj)
+
+    def delete_queryset(self, request, queryset):
+        for obj in queryset:
+            delete_transaction(user=request.user, instance=obj)
+
     @admin.action(description=_("Undelete selected transactions"))
-    def undelete(self, request: HttpRequest, queryset: models.QuerySet):
-        queryset.update(is_deleted=False)
+    def undelete(self, request: HttpRequest, queryset):
+        for obj in queryset:
+            undelete_transaction(user=request.user, instance=obj)
+
         self.message_user(
             request,
             _("Selected transactions has been undeleted successfully"),
             level=messages.SUCCESS,
         )
 
-    def delete_queryset(self, request: HttpRequest, queryset: models.QuerySet):
-        queryset.update(is_deleted=True)
+    @admin.action(description=_("Delete PERMANENTLY selected transactions"))
+    def permanently_delete(self, request: HttpRequest, queryset):
+        for obj in queryset:
+            delete_transaction(user=request.user, instance=obj, permanent=True)
+
+        self.message_user(
+            request,
+            _("Selected transactions has been deleted permanently"),
+            level=messages.SUCCESS,
+        )
 
     @admin.display(description="debit")
     def formatted_debit(self, obj: Transaction):
