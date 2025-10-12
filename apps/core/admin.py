@@ -10,6 +10,7 @@ class ActivityManager(admin.ModelAdmin):
         "user__username",
         "data",
         "content_object",
+        "notes",
     )
     list_filter = ("user", "content_type")
     search_fields = ("object_id",)
