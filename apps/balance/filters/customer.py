@@ -34,8 +34,8 @@ class CustomerFilterset(
     total_debit__gte, total_debit__lte = get_decimal_range_filter()
     total_credit__gte, total_credit__lte = get_decimal_range_filter()
     net__gte, net__lte = get_decimal_range_filter()
-    date__gte = filters.CharFilter(method="filter_date__gte")
-    date__lte = filters.CharFilter(method="filter_date__lte")
+    date__gte = filters.CharFilter(method="filter_date")
+    date__lte = filters.CharFilter(method="filter_date")
     include_zero_nets = filters.TypedChoiceFilter(
         method="filter_include_zero_nets",
         choices=IncludeZeroNetChoices.choices,
@@ -46,21 +46,19 @@ class CustomerFilterset(
             data = {"include_zero_nets": IncludeZeroNetChoices.NO}
         super().__init__(data, queryset, request=request, prefix=prefix)
 
-    def filter_date__gte(
-        self, qs: CustomerQueryset, name: str, value: timezone.datetime
-    ) -> CustomerQueryset:
-        try:
-            start_date = timezone.datetime.strptime(value, "%Y-%m-%d")
-            return qs.filter_date(start_date=start_date)
-        except ValueError:
-            return qs.none()
+    def _parse_date(self, fieldname: str) -> timezone.datetime:
+        date = self.form.cleaned_data.get(fieldname)
 
-    def filter_date__lte(
-        self, qs: CustomerQueryset, name: str, value: str
-    ) -> CustomerQueryset:
+        if date:
+            date = timezone.datetime.strptime(date, "%Y-%m-%d")
+
+        return date
+
+    def filter_date(self, qs: CustomerQueryset, name, value):
         try:
-            end_date = timezone.datetime.strptime(value, "%Y-%m-%d")
-            return qs.filter_date(end_date=end_date)
+            start_date = self._parse_date("date__gte")
+            end_date = self._parse_date("date__lte")
+            return qs.filter_date(start_date=start_date, end_date=end_date)
         except ValueError:
             return qs.none()
 
