@@ -10,11 +10,8 @@ from rest_framework import serializers
 
 from apps.core.dbfields import MoneyField
 from apps.core.models import AbstractSoftDeleteModel, AbstractTimestampModel
-from apps.core.utils import annotate_search
 
 from .customer import Customer
-
-SEARCH_FIELDS = ("customer__name", "notes")
 
 
 class TransactionQueryset(models.QuerySet):
@@ -27,7 +24,6 @@ class TransactionManager(models.Manager):
             TransactionQueryset(self.model, using=self._db)
             .filter(is_deleted=False)
             .select_related("customer")
-            .annotate(search=annotate_search(*SEARCH_FIELDS))
         )
 
 
