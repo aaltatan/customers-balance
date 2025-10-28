@@ -29,7 +29,7 @@ class ListView(
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         template_name = self.get_template_name()
-        if request.htmx:
+        if getattr(request, "htmx", False):
             template_name = self.get_partial_template_name()
 
         context = self.get_context_data()
@@ -53,7 +53,15 @@ class ListView(
 
         return queryset
 
+    def paginate_queryset(self, queryset, page_size):
+        return super().paginate_queryset(queryset, page_size)
+
     def get_filterset(self, queryset: QuerySet) -> FilterSet:
+        if self.filterset_class is None:
+            raise AttributeError(
+                "you must define the filterset_class attribute.",
+            )
+
         return self.filterset_class(self.request.GET, queryset, request=self.request)
 
     def get_search_filterset(self, queryset: QuerySet) -> FilterSet:
@@ -74,16 +82,34 @@ class ListView(
         model_name = self.get_model_name()
         return super().get_partial_template_name(model_name, app_label)
 
+    def get_page_size(self):
+        if not getattr(self, "page_size", None) and not isinstance(
+            self.paginate_by, int
+        ):
+            raise AttributeError(
+                "you must define the page_size attribute.",
+            )
+
+        return self.paginate_by
+
     def get_context_data(self, **kwargs):
         context = {**kwargs}
 
         queryset = self.get_queryset()
+
+        page_size = self.get_page_size()
+        paginator, page, queryset, is_paginated = self.paginate_queryset(
+            queryset, page_size
+        )
 
         app_label = self.get_app_label()
         model_name = self.get_model_name()
 
         context.update(
             {
+                "paginator": paginator,
+                "page_obj": page,
+                "is_paginated": is_paginated,
                 "object_list": queryset,
                 "container_id": f"{app_label}-{model_name}-container",
                 "index_url": reverse_lazy(f"{app_label}:{model_name}:index"),
@@ -92,6 +118,9 @@ class ListView(
 
         if self.add_search_filterset:
             context["search_filterset"] = self.get_search_filterset(queryset)
+            context["search_filterset_form_id"] = (
+                f"{app_label}-{model_name}-search-form"
+            )
 
         if self.add_ordering_filterset:
             context["ordering_filterset"] = self.get_ordering_filterset(queryset)
