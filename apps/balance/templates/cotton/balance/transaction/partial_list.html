@@ -20,8 +20,9 @@
     />
   </c-table.td>
   <c-table.td>{{ obj.date|date:"Y-m-d H:i" }}</c-table.td>
-  <c-table.td>{{ obj.amount|money }}</c-table.td>
   <c-table.td>{{ obj.customer.name }}</c-table.td>
+  <c-table.td>{{ obj.amount|money }}</c-table.td>
+  <c-table.td>{{ obj.net|money }}</c-table.td>
   <c-table.td>{{ obj.notes }}</c-table.td>
 </tr>
 {% empty %}
