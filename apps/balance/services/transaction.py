@@ -3,7 +3,7 @@ from django.db import transaction
 
 from apps.core.models import User
 from apps.core.models.activity import Activity
-from apps.core.protocols import SaveableProtocol
+from apps.core.protocols import Saveable
 from apps.core.services import Service
 
 from ..models import Transaction, TransactionSerializer
@@ -13,14 +13,12 @@ class TransactionService(Service[Transaction]):
     model_class = Transaction
 
 
-def add_transaction(user: User, saver: SaveableProtocol[Transaction]) -> Transaction:
+def add_transaction(user: User, saver: Saveable[Transaction]) -> Transaction:
     return TransactionService.add(user, saver)
 
 
 def change_transaction(
-    user: User,
-    instance: Transaction,
-    saver: SaveableProtocol[Transaction],
+    user: User, instance: Transaction, saver: Saveable[Transaction]
 ) -> Transaction:
     return TransactionService.change(
         user=user,
