@@ -12,8 +12,6 @@ from apps.core.validators import four_char_validator, syrian_mobile_validator
 
 from ..managers import CustomerManager
 
-SEARCH_FIELDS = ("name", "mobile", "notes")
-
 
 class Customer(AbstractTimestampModel):
     name = models.CharField(
