@@ -12,20 +12,8 @@ from rest_framework import serializers
 from apps.core.dbfields import MoneyField
 from apps.core.models import AbstractSoftDeleteModel, AbstractTimestampModel
 
+from ..managers import TransactionManager
 from .customer import Customer
-
-
-class TransactionQueryset(models.QuerySet):
-    pass
-
-
-class TransactionManager(models.Manager):
-    def get_queryset(self):
-        return (
-            TransactionQueryset(self.model, using=self._db)
-            .filter(is_deleted=False)
-            .select_related("customer")
-        )
 
 
 class Transaction(AbstractTimestampModel, AbstractSoftDeleteModel):
