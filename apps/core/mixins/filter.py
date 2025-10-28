@@ -9,11 +9,13 @@ class SearchFilterMixin:
     search_filter_class: type[filters.FilterSet] | None = None
     search_fields: tuple[str, ...] = ("id",)
 
-    def get_search_filterset_class(self) -> type[filters.FilterSet]:
+    def get_search_filterset_class(self):
         """
         Returns the search filter class.
         """
-        if getattr(self, "search_filter_class", None):
+        if getattr(self, "search_filter_class", None) and isinstance(
+            self.search_filter_class, filters.FilterSet
+        ):
             return self.search_filter_class
 
         class SearchFilter(BaseQSearchFilter):
@@ -31,7 +33,7 @@ class OrderingFilterMixin:
     ordering_fields: dict[str, str] | None = None
     ordering_filter_class: type[filters.FilterSet] | None = None
 
-    def get_ordering_filterset_class(self) -> type[filters.FilterSet]:
+    def get_ordering_filterset_class(self):
         """
         Returns the ordering filter class.
         """
@@ -39,7 +41,10 @@ class OrderingFilterMixin:
             raise AttributeError(
                 "you must define the ordering_fields attribute.",
             )
-        if getattr(self, "ordering_filter_class", None):
+
+        if getattr(self, "ordering_filter_class", None) and isinstance(
+            self.ordering_filter_class, filters.FilterSet
+        ):
             return self.ordering_filter_class
 
         class OrderingFilter(filters.FilterSet):
