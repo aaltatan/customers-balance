@@ -24,7 +24,7 @@ class CustomerQueryset(models.QuerySet):
         *,
         start_date: datetime | None = None,
         end_date: datetime | None = None,
-    ):
+    ) -> "CustomerQueryset":
         query = models.Q(transactions__is_deleted=False)
 
         if start_date:
@@ -47,7 +47,7 @@ class CustomerQueryset(models.QuerySet):
         *,
         start_date: timezone.datetime | None = None,
         end_date: timezone.datetime | None = None,
-    ):
+    ) -> "CustomerQueryset":
         qs = self.annotate_totals(start_date=start_date, end_date=end_date)
         qs = qs.filter(~models.Q(transactions_count=0))
         return qs

@@ -41,7 +41,7 @@ class CustomerFilterset(
         choices=IncludeZeroNetChoices.choices,
     )
 
-    def __init__(self, data=None, queryset=None, *, request=None, prefix=None):
+    def __init__(self, data=None, queryset=None, *, request=None, prefix=None) -> None:
         if not data:  # initial request
             data = {"include_zero_nets": IncludeZeroNetChoices.NO}
         super().__init__(data, queryset, request=request, prefix=prefix)
@@ -54,7 +54,7 @@ class CustomerFilterset(
 
         return date
 
-    def filter_date(self, qs: CustomerQueryset, name, value):
+    def filter_date(self, qs: CustomerQueryset, name, value) -> CustomerQueryset:
         try:
             start_date = self._parse_date("date__gte")
             end_date = self._parse_date("date__lte")
