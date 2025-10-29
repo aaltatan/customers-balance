@@ -1,0 +1,16 @@
+<c-vars title="modal" />
+
+<div @click.away="close">
+  <header class="flex justify-between items-center px-4 py-2 bg-white dark:bg-black border-b border-neutral-200 dark:border-neutral-800">
+    <h1>{{ title }}</h1>
+    <c-button @click="close">
+      <c-slot name="icon">
+        <c-tablericon.x class="size-6" />
+      </c-slot>
+    </c-button>
+  </header>
+  <main class="p-4 bg-white dark:bg-black">{{ slot }}</main>
+  {% if footer %}
+  <footer class="px-4 py-2 bg-white dark:bg-black border-t border-neutral-200 dark:border-neutral-800">{{ footer }}</footer>
+  {% endif %}
+</div>

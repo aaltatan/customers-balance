@@ -37,7 +37,7 @@ class OrderingFilterMixin:
         """
         Returns the ordering filter class.
         """
-        if self.ordering_fields is None:
+        if self.ordering_fields is None and len(self.ordering_fields) == 0:
             raise AttributeError(
                 "you must define the ordering_fields attribute.",
             )

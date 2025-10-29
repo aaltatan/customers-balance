@@ -3,6 +3,7 @@ from typing import Literal
 
 from django.db import models
 from django.db.models.signals import pre_save
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
@@ -67,6 +68,9 @@ class Customer(AbstractTimestampModel):
 
     def get_transactions_count(self) -> int:
         return self.transactions.count()
+
+    def get_absolute_url(self):
+        return reverse("balance:customer:detail", kwargs={"slug": self.slug})
 
     class Meta:
         ordering = ("name",)

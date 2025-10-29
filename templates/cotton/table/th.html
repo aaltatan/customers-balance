@@ -1,7 +1,7 @@
 <c-vars :centered="False" />
 
 <th
-  class="p-2 font-medium tracking-tighter border-y border-neutral-200 dark:border-neutral-800 {% if centered %}text-center{% else %}text-start{% endif %}"
+  class="p-2 font-medium tracking-tighter border-b border-dashed border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black {% if centered %}text-center{% else %}text-start{% endif %}"
 >
   {{ slot }}
 </th>

@@ -1,34 +1,35 @@
 {% load formats i18n %}
-<!--  -->
 {% for obj in object_list %}
-<!--  -->
-<tr
-  {% if forloop.last and page_obj.has_next %}
-  hx-get="{{ index_url }}?page={{ page_obj.next_page_number }}"
-  hx-target="#{{ container_id }}"
-  hx-include="*[data-htmx-include]"
-  hx-swap="beforeend"
-  hx-trigger="revealed"
-  {% endif %}
-  class="tr"
-  data-obj-id="{{ obj.pk }}"
->
-  <c-table.td>
-    <input 
-      type="checkbox" 
-      name="obj-{{ obj.pk }}" 
-    />
-  </c-table.td>
-  <c-table.td>{{ obj.date|date:"Y-m-d H:i" }}</c-table.td>
-  <c-table.td>{{ obj.customer.name }}</c-table.td>
-  <c-table.td>{{ obj.amount|money }}</c-table.td>
-  <c-table.td>{{ obj.net|money }}</c-table.td>
-  <c-table.td>{{ obj.notes }}</c-table.td>
-</tr>
+  <tr
+    {% if forloop.last and page_obj.has_next %}
+      hx-get="{{ index_url }}?page={{ page_obj.next_page_number }}"
+      hx-target="#{{ container_id }}"
+      hx-include="*[data-htmx-include]"
+      hx-swap="beforeend"
+      hx-trigger="revealed"
+    {% endif %}
+    class="tr"
+    data-obj-id="{{ obj.pk }}"
+  >
+    <c-table.td>
+      <input type="checkbox" name="obj-{{ obj.pk }}" :checked="checkAll" />
+    </c-table.td>
+    <c-table.td>{{ obj.date|date:"Y-m-d H:i" }}</c-table.td>
+    <c-table.td>
+      <a
+        hx-get="{{ obj.customer.get_absolute_url }}"
+        hx-target="#modal-container"
+        hx-swap="innerHTML"
+        class="hover:underlne cursor-pointer"
+      >{{ obj.customer.name }}</a
+        >
+      </c-table.td>
+      <c-table.td>{{ obj.amount|money }}</c-table.td>
+      <c-table.td>{{ obj.net|money }}</c-table.td>
+      <c-table.td>{{ obj.notes }}</c-table.td>
+    </tr>
 {% empty %}
-<tr>
-  <c-table.td colspan="4" :centered="True">
-    {% translate 'No transactions found' %}
-  </c-table.td>
-</tr>
+  <tr>
+    <c-table.td colspan="4" :centered="True"> {% translate 'No transactions found' %} </c-table.td>
+  </tr>
 {% endfor %}

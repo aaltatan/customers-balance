@@ -1,0 +1,16 @@
+<c-vars
+  :widths="{
+  'base': 'w-[400px]',
+  'sm': 'w-[600px]',
+  'md': 'w-[800px]',
+  'lg': 'w-[1000px]',
+  'xl': 'w-[1200px]',
+  }"
+  width="base"
+/>
+
+<div
+  class="border border-neutral-200 dark:border-neutral-800 rounded-md mx-auto {{ widths|get_item:width }} overflow-hidden shadow-md"
+>
+  {{ slot }}
+</div>

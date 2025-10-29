@@ -18,6 +18,7 @@ dependencies = [
     "django-solo>=2.4.0",
     "cotton-icons>=0.1.0",
     "djangorestframework>=3.16.1",
+    "djhtml>=3.0.10",
 ]
 
 [dependency-groups]

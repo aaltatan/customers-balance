@@ -19,12 +19,17 @@
       <c-tablericon.search class="size-6" />
     </c-inputs.input>
   </c-forms.container>
-  <div class="py-4">
-    <table class="w-full table-auto overflow-hidden">
+  <div class="border border-neutral-200 dark:border-neutral-800 rounded-md my-2 overflow-hidden">
+    <table class="w-full table-auto" x-data="{checkAll: false}">
       <thead>
         <tr>
           <c-table.th>
-            <input type="checkbox" name="check-all" id="check-all" />
+            <input 
+              type="checkbox" 
+              name="check-all" 
+              id="check-all" 
+              x-model="checkAll" 
+            />
           </c-table.th>
           <c-table.th>{% translate 'Date' %}</c-table.th>
           <c-table.th>{% translate 'Customer' %}</c-table.th>

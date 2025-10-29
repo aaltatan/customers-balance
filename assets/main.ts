@@ -18,5 +18,6 @@ Alpine.plugin(mask);
 Alpine.data("colorTheme", data.colorTheme);
 Alpine.data("body", data.body);
 Alpine.data("date", data.inputs.date);
+Alpine.data("modal", data.modal);
 
 Alpine.start();

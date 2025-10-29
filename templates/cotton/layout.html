@@ -1,6 +1,6 @@
 <c-vars page_title="CUSTOMERS BALANCE" />
 
-<!DOCTYPE html>
+<!doctype html>
 <html
   lang="en"
   x-data="colorTheme"
@@ -16,6 +16,7 @@
     class="bg-white dark:bg-black text-neutral-900 dark:text-neutral-100 p-2 mx-auto container"
     hx-indicator="*[data-indicator]"
   >
+    <c-modal.container />
     <c-header />
     {{ slot }}
   </body>
