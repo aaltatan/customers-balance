@@ -12,4 +12,4 @@ class Saveable(Protocol[ModelType]):
         pass
 
     class Meta:
-        model: ModelType
+        model: type[models.Model]

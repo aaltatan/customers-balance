@@ -54,7 +54,7 @@ def change_instance(
 
 @transaction.atomic
 def delete_instance(
-    user: User, instance: ModelType, serializer_class: type[ModelSerializer]
+    user: User, instance: models.Model, serializer_class: type[ModelSerializer]
 ) -> None:
     data = serializer_class(instance).data
     instance_pk = instance.pk

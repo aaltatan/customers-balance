@@ -7,7 +7,7 @@ from ..filters import BaseQSearchFilter, get_ordering_filter
 class SearchFilterMixin:
     model: models.Model
     search_filter_class: type[filters.FilterSet] | None = None
-    search_fields: tuple[str, ...] = ("id",)
+    search_fields: tuple[str, ...] | None = None
 
     def get_search_filterset_class(self):
         """
@@ -19,7 +19,7 @@ class SearchFilterMixin:
             return self.search_filter_class
 
         class SearchFilter(BaseQSearchFilter):
-            search_fields = self.search_fields
+            search_fields = self.search_fields or ("id",)
 
             class Meta:
                 model = self.model
@@ -37,7 +37,7 @@ class OrderingFilterMixin:
         """
         Returns the ordering filter class.
         """
-        if self.ordering_fields is None and len(self.ordering_fields) == 0:
+        if self.ordering_fields is None or len(self.ordering_fields) == 0:
             raise AttributeError(
                 "you must define the ordering_fields attribute.",
             )

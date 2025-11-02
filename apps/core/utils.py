@@ -66,7 +66,7 @@ def get_keywords_query(
     return query
 
 
-def annotate_search(*fields: tuple[str]) -> Concat:
+def annotate_search(*fields: str) -> Concat:
     fields = fields * 2
 
     args: list[models.F | models.Value] = []
@@ -80,7 +80,7 @@ def annotate_search(*fields: tuple[str]) -> Concat:
 
 def parse_decimal(value: str) -> Decimal:
     number = value.replace(",", "")
-    
+
     try:
         number = Decimal(number)
     except InvalidOperation:

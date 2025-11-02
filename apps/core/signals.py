@@ -20,10 +20,10 @@ def slugify_name(
     *args,
     **kwargs: dict[str, Any],
 ) -> None:
-    slug = kwargs.get(
-        "slug",
-        slugify(instance.name, allow_unicode=True),
-    )
+    slug: str | None = kwargs.get("slug")
+    if slug is None:
+        slug = slugify(instance.name, allow_unicode=True)
+
     Model = instance.__class__
 
     slug_exists = Model.objects.filter(slug=slug).exclude(pk=instance.pk).exists()

@@ -1,4 +1,4 @@
-from typing import Any, Mapping
+from typing import Any
 
 import django_filters as filters
 from django import forms
@@ -64,14 +64,11 @@ class CustomOrderingFilter(filters.OrderingFilter):
     descending_fmt = _("%s (desc)")
 
 
-def get_ordering_filter(fields: Mapping[str, str]) -> CustomOrderingFilter:
+def get_ordering_filter(fields: dict[str, str]) -> CustomOrderingFilter:
     """
     Returns an OrderingFilter.
     """
-    return CustomOrderingFilter(
-        fields=list(fields.keys()),
-        field_labels=fields,
-    )
+    return CustomOrderingFilter(fields=fields, field_labels=fields)
 
 
 def get_decimal_range_filter(method_name: str = "filter_string_decimal"):
