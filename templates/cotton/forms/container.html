@@ -1,12 +1,12 @@
-<c-vars url target />
-
-<form
-  hx-swap="{% if hx_swap %}{{ hx_swap }}{% else %}innerHTML{% endif %}"
-  hx-push-url="true"
-  @submit.prevent
-  {{
-  attrs
-  }}
->
+<c-vars url
+        target />
+<form hx-swap="{% if hx_swap %}
+                 {{ hx_swap }}
+               {% else %}
+                 innerHTML
+               {% endif %}"
+      hx-push-url="true"
+      @submit.prevent
+      {{ attrs }}>
   {{ slot }}
 </form>

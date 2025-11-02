@@ -1,28 +1,19 @@
 {% load django_vite %}
 
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0" />
 <!-- htmx config -->
-<meta
-  name="htmx-config"
-  content='{
-    "globalViewTransitions": true,
-    "refreshOnHistoryMiss": true,
-    "defaultSwapStyle": "outerHTML"
-  }'
-/>
-
+<meta name="htmx-config"
+      content='{ "globalViewTransitions": true, "refreshOnHistoryMiss": true, "defaultSwapStyle": "outerHTML" }' />
 <style>
   [x-cloak] {
     display: none;
   }
 </style>
-
-<link rel="shortcut icon" href="{% vite_asset_url 'assets/favicon.ico' %}" type="image/x-icon" />
-
+<link rel="shortcut icon"
+      href="{% vite_asset_url 'assets/favicon.ico' %}"
+      type="image/x-icon" />
 {% vite_hmr_client %}
-<!--  -->
 {% vite_asset './assets/main.ts' %}
-
 <title>{{ project_name }}</title>

@@ -1,31 +1,33 @@
-<c-vars field label placeholder="e.g.: 2025-10-10" :fill_onfocus="True" />
-
+<c-vars field
+        label
+        placeholder="e.g.: 2025-10-10"
+        :fill_onfocus="True" />
+<!--  -->
 <c-inputs.wrapper>
   <c-slot name="input">
-    <input
-      type="text"
-      id="{{ field.id_for_label }}"
-      name="{{ field.name }}"
-      value="{{ field.value|default_if_none:'' }}"
-      class="input {% if slot %}ps-12{% endif %}"
-      x-mask="9999-99-99"
-      x-data="date"
-      placeholder="{{ placeholder }}"
-      @keydown.Alt.Down.prevent="changeYear($el, 'up')"
-      @keydown.Alt.Up.prevent="changeYear($el, 'down')"
-      @keydown.Shift.Down.prevent="changeMonth($el, 'up')"
-      @keydown.Shift.Up.prevent="changeMonth($el, 'down')"
-      @keydown.Down.prevent="changeDay($el, 'up')"
-      @keydown.Up.prevent="changeDay($el, 'down')"
-      @dblclick="setInput($el)"
-      minlength="10"
-      {% if fill_onfocus %}
-      @focus="handleFocus($el)"
-      {% endif %}
-      {{
-      attrs
-      }}
-    />
+    <input type="text"
+           id="{{ field.id_for_label }}"
+           name="{{ field.name }}"
+           value="{{ field.value|default_if_none:'' }}"
+           class="input
+                  {% if slot %}
+                    ps-12
+                  {% endif %}"
+           x-mask="9999-99-99"
+           x-data="date"
+           placeholder="{{ placeholder }}"
+           @keydown.Alt.Down.prevent="changeYear($el, 'up')"
+           @keydown.Alt.Up.prevent="changeYear($el, 'down')"
+           @keydown.Shift.Down.prevent="changeMonth($el, 'up')"
+           @keydown.Shift.Up.prevent="changeMonth($el, 'down')"
+           @keydown.Down.prevent="changeDay($el, 'up')"
+           @keydown.Up.prevent="changeDay($el, 'down')"
+           @dblclick="setInput($el)"
+           minlength="10"
+           {% if fill_onfocus %}
+             @focus="handleFocus($el)"
+           {% endif %}
+           {{ attrs }} />
   </c-slot>
   {{ slot }}
 </c-inputs.wrapper>

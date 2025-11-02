@@ -1,16 +1,19 @@
 {% load i18n %}
 
-<header
-  class="sticky top-2 start-0 p-4 mb-2 z-40 rounded-md bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800"
->
+<header class="sticky top-2 start-0 p-4 mb-2 z-40 rounded-md bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800">
   <nav class="flex justify-between items-center">
     <h1 class="text-xl tracking-tighter font-medium">
-      <a href="{% url 'balance:customer:index' %}"> {% translate 'Customers Balance' %} </a>
+      <a href="{% url 'balance:customer:index' %}">
+        {% translate "Customers Balance" %}
+      </a>
     </h1>
-    <a href="{% url 'balance:transaction:index' %}"> {% translate 'Transactions' %} </a>
+    <a href="{% url 'balance:transaction:index' %}">
+      {% translate "Transactions" %}
+    </a>
     <ul class="flex items-center gap-4">
       <c-spinner />
-      <c-button @click="toggleTheme" title="{% translate 'Toggle Theme' %}">
+      <c-button @click="toggleTheme"
+                title='{% translate "Toggle Theme" %}'>
         <c-slot name="icon">
           <div x-show="theme === 'light'">
             <c-tablericon.sun class="size-6" />

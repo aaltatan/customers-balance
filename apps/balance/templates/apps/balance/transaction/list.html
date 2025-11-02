@@ -1,41 +1,37 @@
 {% load i18n %}
 
-<c-layout page_title="{% translate 'Transactions' %}">
-  <c-forms.container
-    hx-trigger="search"
-    hx-get="{{ index_url }}"
-    hx-target="#{{ container_id }}"
-    hx-include="*[data-htmx-include]"
-    id="{{ search_filterset_form_id }}"
-    class="w-full"
-    data-htmx-include
-  >
-    <c-inputs.input
-      :field="search_filterset.form.q"
-      label="{% translate 'search' %}"
-      placeholder="{% translate 'search' %}"
-      type="search"
-    >
+<c-layout page_title='{% translate "transactions" %}'>
+  <c-forms.container hx-trigger="search" hx-get="{{ index_url }}" hx-target="#{{ container_id }}" hx-include="*[data-htmx-include]" id="{{ search_filterset_form_id }}" class="w-full" data-htmx-include>
+    <c-inputs.input :field="search_filterset.form.q" label='{% translate "search" %}' placeholder='{% translate "search" %}' type="search">
       <c-tablericon.search class="size-6" />
     </c-inputs.input>
   </c-forms.container>
   <div class="border border-neutral-200 dark:border-neutral-800 rounded-md my-2 overflow-hidden">
-    <table class="w-full table-auto" x-data="{checkAll: false}">
+    <table class="w-full table-auto"
+           x-data="{checkAll: false}">
       <thead>
         <tr>
           <c-table.th>
-            <input 
-              type="checkbox" 
-              name="check-all" 
-              id="check-all" 
-              x-model="checkAll" 
-            />
+            <input type="checkbox"
+                   name="check-all"
+                   id="check-all"
+                   x-model="checkAll" />
           </c-table.th>
-          <c-table.th>{% translate 'Date' %}</c-table.th>
-          <c-table.th>{% translate 'Customer' %}</c-table.th>
-          <c-table.th>{% translate 'Amount' %}</c-table.th>
-          <c-table.th>{% translate 'Net' %}</c-table.th>
-          <c-table.th>{% translate 'Notes' %}</c-table.th>
+          <c-table.th>
+            {% translate "Date" %}
+          </c-table.th>
+          <c-table.th>
+            {% translate "Customer" %}
+          </c-table.th>
+          <c-table.th>
+            {% translate "Amount" %}
+          </c-table.th>
+          <c-table.th>
+            {% translate "Net" %}
+          </c-table.th>
+          <c-table.th>
+            {% translate "Notes" %}
+          </c-table.th>
         </tr>
       </thead>
       <tbody id="{{ container_id }}">

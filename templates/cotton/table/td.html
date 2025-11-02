@@ -1,3 +1,7 @@
 <c-vars :centered="False" />
-
-<td class="p-2 {% if centered %}text-center{% endif %}" {{ attrs }}>{{ slot }}</td>
+<td class="p-2
+           {% if centered %}
+             text-center
+           {% endif %}"
+    {{ attrs }}>{{ slot }}
+</td>

@@ -1,20 +1,22 @@
 {% load widget_tweaks i18n %}
 
-<c-vars field label type="text" placeholder="Search..." />
-
+<c-vars field
+        label
+        type="text"
+        placeholder="Search..." />
+<!--  -->
 <c-inputs.wrapper>
   <c-slot name="input">
-    <input
-      type="{{ type }}"
-      id="{{ field.id_for_label }}"
-      name="{{ field.name }}"
-      value="{{ field.value|default_if_none:'' }}"
-      class="input {% if slot %}ps-12{% endif %}"
-      placeholder="{{ placeholder }}"
-      {{
-      attrs
-      }}
-    />
+    <input type="{{ type }}"
+           id="{{ field.id_for_label }}"
+           name="{{ field.name }}"
+           value="{{ field.value|default_if_none:'' }}"
+           class="input
+                  {% if slot %}
+                    ps-12
+                  {% endif %}"
+           placeholder="{{ placeholder }}"
+           {{ attrs }} />
   </c-slot>
   {{ slot }}
 </c-inputs.wrapper>
