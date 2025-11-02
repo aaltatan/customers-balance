@@ -4,23 +4,19 @@ from django.db import transaction
 from apps.core.models import User
 from apps.core.models.activity import Activity
 from apps.core.protocols import Saveable
-from apps.core.services import Service
+from apps.core.services import add_instance, change_instance
 
 from ..models import Transaction, TransactionSerializer
 
 
-class TransactionService(Service[Transaction]):
-    model_class = Transaction
-
-
 def add_transaction(user: User, saver: Saveable[Transaction]) -> Transaction:
-    return TransactionService.add(user, saver)
+    return add_instance(user, saver)
 
 
 def change_transaction(
     user: User, instance: Transaction, saver: Saveable[Transaction]
 ) -> Transaction:
-    return TransactionService.change(
+    return change_instance(
         user=user,
         instance=instance,
         serializer_class=TransactionSerializer,
