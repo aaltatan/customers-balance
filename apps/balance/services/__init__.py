@@ -8,10 +8,10 @@ from .transaction import (
 
 __all__ = [
     "add_customer",
-    "change_customer",
-    "delete_customer",
     "add_transaction",
+    "change_customer",
     "change_transaction",
+    "delete_customer",
     "delete_transaction",
     "undelete_transaction",
 ]

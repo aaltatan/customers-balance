@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db.models import DecimalField
 
 from .validators import (
@@ -8,7 +10,7 @@ from .validators import (
 
 
 class MoneyField(DecimalField):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: dict[str, Any]) -> None:
         kwargs.setdefault("max_digits", 24)
         kwargs.setdefault("decimal_places", 4)
         kwargs.setdefault("validators", [decimal_min_value_validator])
@@ -16,7 +18,7 @@ class MoneyField(DecimalField):
 
 
 class PercentageField(DecimalField):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: dict[str, Any]) -> None:
         kwargs.setdefault("max_digits", 10)
         kwargs.setdefault("decimal_places", 6)
         kwargs.setdefault(

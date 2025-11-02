@@ -6,12 +6,7 @@ from django.views import View
 from django.views.generic.list import MultipleObjectMixin
 from django_filters import FilterSet
 
-from ..mixins import (
-    ModelInfoMixin,
-    OrderingFilterMixin,
-    SearchFilterMixin,
-    TemplateListMixin,
-)
+from apps.core.mixins import ModelInfoMixin, OrderingFilterMixin, SearchFilterMixin, TemplateListMixin
 
 
 class ListView(
@@ -27,7 +22,7 @@ class ListView(
     add_search_filterset: bool = True
     add_ordering_filterset: bool = True
 
-    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+    def get(self, request: HttpRequest, *_, **__) -> HttpResponse:
         template_name = self.get_template_name()
         if getattr(request, "htmx", False):
             template_name = self.get_partial_template_name()
@@ -58,19 +53,18 @@ class ListView(
 
     def get_filterset(self, queryset: QuerySet) -> FilterSet:
         if self.filterset_class is None:
-            raise AttributeError(
-                "you must define the filterset_class attribute.",
-            )
+            message = "you must define the filterset_class attribute."
+            raise AttributeError(message)
 
         return self.filterset_class(self.request.GET, queryset, request=self.request)
 
     def get_search_filterset(self, queryset: QuerySet) -> FilterSet:
-        SearchFilterset = self.get_search_filterset_class()
-        return SearchFilterset(self.request.GET, queryset, request=self.request)
+        filterset = self.get_search_filterset_class()
+        return filterset(self.request.GET, queryset, request=self.request)
 
     def get_ordering_filterset(self, queryset: QuerySet) -> FilterSet:
-        OrderingFilterset = self.get_ordering_filterset_class()
-        return OrderingFilterset(self.request.GET, queryset, request=self.request)
+        filterset = self.get_ordering_filterset_class()
+        return filterset(self.request.GET, queryset, request=self.request)
 
     def get_template_name(self):
         app_label = self.get_app_label()
@@ -83,12 +77,9 @@ class ListView(
         return super().get_partial_template_name(model_name, app_label)
 
     def get_page_size(self):
-        if not getattr(self, "page_size", None) and not isinstance(
-            self.paginate_by, int
-        ):
-            raise AttributeError(
-                "you must define the page_size attribute.",
-            )
+        if not getattr(self, "page_size", None) and not isinstance(self.paginate_by, int):
+            message = "you must define the page_size attribute."
+            raise AttributeError(message)
 
         return self.paginate_by
 
@@ -98,9 +89,7 @@ class ListView(
         queryset = self.get_queryset()
 
         page_size = self.get_page_size()
-        paginator, page, queryset, is_paginated = self.paginate_queryset(
-            queryset, page_size
-        )
+        paginator, page, queryset, is_paginated = self.paginate_queryset(queryset, page_size)
 
         app_label = self.get_app_label()
         model_name = self.get_model_name()
@@ -113,14 +102,12 @@ class ListView(
                 "object_list": queryset,
                 "container_id": f"{app_label}-{model_name}-container",
                 "index_url": reverse_lazy(f"{app_label}:{model_name}:index"),
-            }
+            },
         )
 
         if self.add_search_filterset:
             context["search_filterset"] = self.get_search_filterset(queryset)
-            context["search_filterset_form_id"] = (
-                f"{app_label}-{model_name}-search-form"
-            )
+            context["search_filterset_form_id"] = f"{app_label}-{model_name}-search-form"
 
         if self.add_ordering_filterset:
             context["ordering_filterset"] = self.get_ordering_filterset(queryset)

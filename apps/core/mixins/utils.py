@@ -6,10 +6,12 @@ class ModelInfoMixin:
 
     def get_model_name(self) -> str:
         if self.model._meta is None:
-            raise AttributeError("you must define the model attribute.")
+            message = "you must define the model attribute."
+            raise AttributeError(message)
 
         if self.model._meta.model_name is None:
-            raise AttributeError("you must define the model_name attribute.")
+            message = "you must define the model_name attribute."
+            raise AttributeError(message)
 
         return self.model._meta.model_name
 

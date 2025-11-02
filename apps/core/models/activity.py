@@ -8,12 +8,7 @@ from .user import User
 
 class ActivityManager(models.Manager):
     def get_queryset(self):
-        return (
-            super()
-            .get_queryset()
-            .select_related("user", "content_type")
-            .prefetch_related("content_object")
-        )
+        return super().get_queryset().select_related("user", "content_type").prefetch_related("content_object")
 
 
 class Activity(models.Model):
@@ -43,7 +38,7 @@ class Activity(models.Model):
     )
     notes = models.CharField(
         max_length=255,
-        null=True,
+        default="",
         blank=True,
     )
     content_type = models.ForeignKey(
@@ -58,10 +53,10 @@ class Activity(models.Model):
 
     objects = ActivityManager()
 
-    def __str__(self) -> str:
-        return f"Activity[{self.kind}] @{self.user.username}"
-
     class Meta:
-        ordering = ["-created_at", "kind"]
+        ordering = ("-created_at", "kind")
         verbose_name = _("activity")
         verbose_name_plural = _("activities")
+
+    def __str__(self) -> str:
+        return f"Activity[{self.kind}] @{self.user.username}"

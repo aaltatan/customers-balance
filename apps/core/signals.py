@@ -17,16 +17,16 @@ class SlugNameModelProtocol(Protocol):
 def slugify_name(
     sender: Any,
     instance: SlugNameModelProtocol,
-    *args,
+    *_: Any,
     **kwargs: dict[str, Any],
 ) -> None:
     slug: str | None = kwargs.get("slug")
     if slug is None:
         slug = slugify(instance.name, allow_unicode=True)
 
-    Model = instance.__class__
+    model = instance.__class__
 
-    slug_exists = Model.objects.filter(slug=slug).exclude(pk=instance.pk).exists()
+    slug_exists = model.objects.filter(slug=slug).exclude(pk=instance.pk).exists()
 
     if slug_exists:
         slug = increase_slug_by_one(slug)
@@ -37,3 +37,4 @@ def slugify_name(
         )
 
     instance.slug = slug
+    return None

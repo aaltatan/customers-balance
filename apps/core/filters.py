@@ -5,13 +5,11 @@ from django import forms
 from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 
-from .utils import get_keywords_query, parse_decimal, annotate_search
+from .utils import annotate_search, get_keywords_query, parse_decimal
 
 
 class FilterTextMixin:
-    """
-    A mixin that adds a text filter to a model.
-    """
+    """A mixin that adds a text filter to a model."""
 
     def filter_text(self, qs: QuerySet, name: str, value: Any) -> QuerySet:
         if not value:
@@ -31,9 +29,7 @@ class FilterStringDecimalMixin:
 
 
 class BaseQSearchFilter(filters.FilterSet):
-    """
-    a base class for filters that have a search field **(q)**.
-    """
+    """a base class for filters that have a search field **(q)**."""
 
     search_fields: tuple[str, ...] = ()
 
@@ -49,15 +45,11 @@ class BaseQSearchFilter(filters.FilterSet):
     def search(
         self,
         queryset: QuerySet,
-        name: str,
+        _: str,
         value: str,
     ) -> QuerySet:
-        """
-        Searches the queryset for the given name and value.
-        """
-        return queryset.annotate(search=annotate_search(*self.search_fields)).filter(
-            get_keywords_query(value)
-        )
+        """Search the queryset for the given name and value."""
+        return queryset.annotate(search=annotate_search(*self.search_fields)).filter(get_keywords_query(value))
 
 
 class CustomOrderingFilter(filters.OrderingFilter):
@@ -65,9 +57,7 @@ class CustomOrderingFilter(filters.OrderingFilter):
 
 
 def get_ordering_filter(fields: dict[str, str]) -> CustomOrderingFilter:
-    """
-    Returns an OrderingFilter.
-    """
+    """Return an OrderingFilter."""
     return CustomOrderingFilter(fields=fields, field_labels=fields)
 
 

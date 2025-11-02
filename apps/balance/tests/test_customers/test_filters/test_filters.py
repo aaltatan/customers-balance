@@ -18,7 +18,7 @@ class CustomerExpectedData:
     total_credit: Decimal
     net: Decimal = field(init=False)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.total_debit = Decimal(self.total_debit)
         self.total_credit = Decimal(self.total_credit)
         self.net = self.total_debit - self.total_credit
@@ -71,9 +71,7 @@ class TestFilters(TestFiltersSetupMixin, TestCase):
         ]
     )
     def test_filter_by_name(self, keyword: str, expected_name: str):
-        filtered_qs = CustomerFilterset(
-            queryset=self.init_qs, data={"name": keyword}
-        ).qs
+        filtered_qs = CustomerFilterset(queryset=self.init_qs, data={"name": keyword}).qs
         self.assertEqual(filtered_qs.count(), 1)
         self.assertEqual(filtered_qs.first().name, expected_name)
 
@@ -111,9 +109,7 @@ class TestFilters(TestFiltersSetupMixin, TestCase):
             ),
         ]
     )
-    def test_filter_by_totals_or_net(
-        self, filters: dict[str, Decimal], expected_names: list[str]
-    ):
+    def test_filter_by_totals_or_net(self, filters: dict[str, Decimal], expected_names: list[str]):
         filters.update({"include_zero_nets": IncludeZeroNetChoices.YES})
         filtered_qs = CustomerFilterset(queryset=self.init_qs, data=filters).qs
 
@@ -127,12 +123,8 @@ class TestFilters(TestFiltersSetupMixin, TestCase):
             ("lte", 0, ["Customer 4"]),
         ]
     )
-    def test_filter_by_transactions_count(
-        self, method: Literal["gte", "lte"], count: int, expected_names: list[str]
-    ):
-        filtered_qs = CustomerFilterset(
-            queryset=self.init_qs, data={f"transactions_count__{method}": count}
-        ).qs
+    def test_filter_by_transactions_count(self, method: Literal["gte", "lte"], count: int, expected_names: list[str]):
+        filtered_qs = CustomerFilterset(queryset=self.init_qs, data={f"transactions_count__{method}": count}).qs
         self.assertEqual(filtered_qs.count(), len(expected_names))
         self.assertEqual([customer.name for customer in filtered_qs], expected_names)
 
@@ -185,9 +177,7 @@ class TestFilters(TestFiltersSetupMixin, TestCase):
             ),
         ]
     )
-    def test_filter_by_date(
-        self, data: dict[str, Any], customers: dict[str, CustomerExpectedData]
-    ):
+    def test_filter_by_date(self, data: dict[str, Any], customers: dict[str, CustomerExpectedData]):
         filtered_qs = CustomerFilterset(queryset=self.init_qs, data=data).qs
 
         self.assertEqual(filtered_qs.count(), len(customers))

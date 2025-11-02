@@ -9,10 +9,10 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from apps.balance.managers import TransactionManager
 from apps.core.dbfields import MoneyField
 from apps.core.models import AbstractSoftDeleteModel, AbstractTimestampModel
 
-from ..managers import TransactionManager
 from .customer import Customer
 
 
@@ -67,20 +67,12 @@ class Transaction(AbstractTimestampModel, AbstractSoftDeleteModel):
         errors: dict[str, ValidationError] = {}
 
         if self.debit == 0 and self.credit == 0:
-            errors["debit"] = ValidationError(
-                _("both debit and credit cannot be zero.")
-            )
-            errors["credit"] = ValidationError(
-                _("both debit and credit cannot be zero.")
-            )
+            errors["debit"] = ValidationError(_("both debit and credit cannot be zero."))
+            errors["credit"] = ValidationError(_("both debit and credit cannot be zero."))
 
         if self.debit != 0 and self.credit != 0:
-            errors["debit"] = ValidationError(
-                _("both debit and credit cannot be filled.")
-            )
-            errors["credit"] = ValidationError(
-                _("both debit and credit cannot be filled.")
-            )
+            errors["debit"] = ValidationError(_("both debit and credit cannot be filled."))
+            errors["credit"] = ValidationError(_("both debit and credit cannot be filled."))
 
         if errors:
             raise ValidationError(errors)
@@ -106,10 +98,10 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 
 def slugify_transaction(
-    sender: Any,
+    _: Any,
     instance: Transaction,
-    *args,
-    **kwargs: dict[str, Any],
+    *__: Any,
+    **___: dict[str, Any],
 ) -> None:
     if instance.slug is None:
         instance.slug = instance.uuid.hex

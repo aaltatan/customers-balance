@@ -1,6 +1,6 @@
 from django import forms
 
-from ..models import Customer
+from apps.balance.models import Customer
 
 
 class CustomerForm(forms.ModelForm):

@@ -1,11 +1,11 @@
 from django.utils.timezone import datetime
 
-from ....models import Customer, Transaction
+from apps.balance.models import Customer, Transaction
 
 
 class TestFiltersSetupMixin:
     @classmethod
-    def setUpTestData(cls):
+    def setUpTestData(cls) -> None:
         Customer(name="Customer 1").save()
         Customer(name="Customer 2", notes="Amazing").save()
         Customer(name="Customer 3", notes="Amazing", mobile="0947302503").save()
@@ -22,19 +22,19 @@ class TestFiltersSetupMixin:
         # ---------------------------------------------
         # date	      customer	  debit 	    credit
         # ---------------------------------------------
-        #! 2025-10-05	c1	        100,000 	-
-        #! 2025-10-05	c1	        50,000 	    -
-        #? 2025-10-05	c2	        450,000 	-
-        #? 2025-10-05	c2	        -   	    300,000
-        #* 2025-10-05	c3	        20,000 	    -
+        # * 2025-10-05	c1	        100,000 	-
+        # * 2025-10-05	c1	        50,000 	    -
+        # ? 2025-10-05	c2	        450,000 	-
+        # ? 2025-10-05	c2	        -   	    300,000
+        # * 2025-10-05	c3	        20,000 	    -
 
-        #! 2025-10-06	c1	        -   	    150,000
-        #? 2025-10-06	c2	        -   	    100,000
-        #* 2025-10-06	c3	        -   	    10,000
+        # * 2025-10-06	c1	        -   	    150,000
+        # ? 2025-10-06	c2	        -   	    100,000
+        # * 2025-10-06	c3	        -   	    10,000
 
-        #! 2025-10-07	c1	        50,000 	    -
-        #? 2025-10-07	c2	        40,000 	    -
-        #* 2025-10-07	c3	        -   	    10,000
+        # * 2025-10-07	c1	        50,000 	    -
+        # ? 2025-10-07	c2	        40,000 	    -
+        # * 2025-10-07	c3	        -   	    10,000
 
         # pivot report
         # ---------------------------------------------------------------------
@@ -64,6 +64,6 @@ class TestFiltersSetupMixin:
             trans.save()
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         Transaction.objects.all().delete()
         Customer.objects.all().delete()

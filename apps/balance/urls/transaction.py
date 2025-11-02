@@ -1,5 +1,6 @@
 from django.urls import path
-from ..views import transaction
+
+from apps.balance.views import transaction
 
 app_name = "transaction"
 

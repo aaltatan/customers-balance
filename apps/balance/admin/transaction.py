@@ -2,13 +2,8 @@ from django.contrib import admin, messages
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from ..models import Transaction
-from ..services import (
-    add_transaction,
-    change_transaction,
-    delete_transaction,
-    undelete_transaction,
-)
+from apps.balance.models import Transaction
+from apps.balance.services import add_transaction, change_transaction, delete_transaction, undelete_transaction
 
 
 @admin.register(Transaction)

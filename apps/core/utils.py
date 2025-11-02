@@ -6,9 +6,6 @@ from django.db.models.functions import Concat
 
 
 def increase_slug_by_one(slug: str) -> str:
-    """
-    increases the slug by one.
-    """
     if not slug:
         return slug
 
@@ -27,9 +24,7 @@ def increase_slug_by_one(slug: str) -> str:
 
 
 def get_differences(from_: dict, to: dict) -> dict:
-    """
-    Returns the differences between two dictionaries.
-    """
+    """Return the differences between two dictionaries."""
     differences: set = set(from_.items()) ^ set(to.items())
 
     before: dict = {}
@@ -44,8 +39,8 @@ def get_differences(from_: dict, to: dict) -> dict:
 
     if differences:
         return {"before": before, "after": after}
-    else:
-        return {}
+
+    return {}
 
 
 def get_keywords_query(
@@ -53,9 +48,7 @@ def get_keywords_query(
     *,
     field_name: str = "search",
 ) -> models.Q:
-    """
-    Returns a search query.
-    """
+    """Return a search query."""
     query: models.Q = models.Q()
     keywords = value.split(" ")
 
@@ -84,6 +77,6 @@ def parse_decimal(value: str) -> Decimal:
     try:
         number = Decimal(number)
     except InvalidOperation:
-        number = Decimal("0")
+        number = Decimal(0)
 
     return number

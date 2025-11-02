@@ -1,21 +1,18 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db import transaction
 
+from apps.balance.models import Transaction, TransactionSerializer
 from apps.core.models import User
 from apps.core.models.activity import Activity
 from apps.core.protocols import Saveable
 from apps.core.services import add_instance, change_instance
-
-from ..models import Transaction, TransactionSerializer
 
 
 def add_transaction(user: User, saver: Saveable[Transaction]) -> Transaction:
     return add_instance(user, saver)
 
 
-def change_transaction(
-    user: User, instance: Transaction, saver: Saveable[Transaction]
-) -> Transaction:
+def change_transaction(user: User, instance: Transaction, saver: Saveable[Transaction]) -> Transaction:
     return change_instance(
         user=user,
         instance=instance,
@@ -25,9 +22,7 @@ def change_transaction(
 
 
 @transaction.atomic
-def delete_transaction(
-    user: User, instance: Transaction, permanent: bool = False
-) -> None:
+def delete_transaction(user: User, instance: Transaction, *, permanent: bool = False) -> None:
     data = TransactionSerializer(instance).data
     instance_pk = instance.pk
 

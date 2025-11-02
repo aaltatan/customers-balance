@@ -1,17 +1,18 @@
+from typing import Any
+
 import django_filters as filters
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from apps.balance.managers import CustomerQueryset
+from apps.balance.models import Customer
 from apps.core.filters import (
     FilterStringDecimalMixin,
     FilterTextMixin,
     get_decimal_range_filter,
     get_text_filter,
 )
-
-from ..managers import CustomerQueryset
-from ..models import Customer
 
 
 class IncludeZeroNetChoices(models.TextChoices):
@@ -25,12 +26,8 @@ class CustomerFilterset(
     filters.FilterSet,
 ):
     name = get_text_filter()
-    transactions_count__gte = filters.NumberFilter(
-        field_name="transactions_count", lookup_expr="gte"
-    )
-    transactions_count__lte = filters.NumberFilter(
-        field_name="transactions_count", lookup_expr="lte"
-    )
+    transactions_count__gte = filters.NumberFilter(field_name="transactions_count", lookup_expr="gte")
+    transactions_count__lte = filters.NumberFilter(field_name="transactions_count", lookup_expr="lte")
     total_debit__gte, total_debit__lte = get_decimal_range_filter()
     total_credit__gte, total_credit__lte = get_decimal_range_filter()
     net__gte, net__lte = get_decimal_range_filter()
@@ -54,7 +51,7 @@ class CustomerFilterset(
 
         return date
 
-    def filter_date(self, qs: CustomerQueryset, name, value) -> CustomerQueryset:
+    def filter_date(self, qs: CustomerQueryset, _: str, __: dict[str, Any]) -> CustomerQueryset:
         try:
             start_date = self._parse_date("date__gte")
             end_date = self._parse_date("date__lte")
@@ -62,9 +59,7 @@ class CustomerFilterset(
         except ValueError:
             return qs.none()
 
-    def filter_include_zero_nets(
-        self, qs: CustomerQueryset, name: str, value: str
-    ) -> CustomerQueryset:
+    def filter_include_zero_nets(self, qs: CustomerQueryset, _: str, value: str) -> CustomerQueryset:
         if value == IncludeZeroNetChoices.NO:
             return qs.filter(~models.Q(net=0))
 

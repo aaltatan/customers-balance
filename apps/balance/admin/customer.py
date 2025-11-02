@@ -3,8 +3,8 @@ from decimal import Decimal
 from django.contrib import admin
 from django.http import HttpRequest
 
-from ..models import Customer, Transaction
-from ..services import add_customer, change_customer, delete_customer
+from apps.balance.models import Customer, Transaction
+from apps.balance.services import add_customer, change_customer, delete_customer
 
 
 class TransactionsInline(admin.TabularInline):
@@ -52,20 +52,16 @@ class CustomerAdmin(admin.ModelAdmin):
 
     @admin.display(description="transactions count")
     def transactions_count(self, obj: Customer) -> str:
-        transactions_count: Decimal = getattr(obj, "transactions_count")
-        return f"{transactions_count:,}"
+        return f"{obj.transactions_count:,}"
 
     @admin.display(description="total debit")
     def total_debit(self, obj: Customer) -> str:
-        total_debit: Decimal = getattr(obj, "total_debit")
-        return f"{total_debit:,}"
+        return f"{obj.total_debit:,}"
 
     @admin.display(description="total credit")
     def total_credit(self, obj: Customer) -> str:
-        total_credit: Decimal = getattr(obj, "total_credit")
-        return f"{total_credit:,}"
+        return f"{obj.total_credit:,}"
 
     @admin.display(description="net")
     def net(self, obj: Customer) -> str:
-        net: Decimal = getattr(obj, "net")
-        return f"{net:,}"
+        return f"{obj.net:,}"

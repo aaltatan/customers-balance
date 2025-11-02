@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, ClassVar
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.http import HttpRequest, HttpResponse
@@ -6,10 +6,9 @@ from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 
+from apps.balance.filters import CustomerFilterset
+from apps.balance.models import Customer
 from apps.core.views import ListView
-
-from ..filters import CustomerFilterset
-from ..models import Customer
 
 
 class CustomerDetailView(PermissionRequiredMixin, View):
@@ -23,9 +22,9 @@ class CustomerDetailView(PermissionRequiredMixin, View):
     def get(
         self,
         request: HttpRequest,
-        *args: tuple[Any],
+        *_: tuple[Any],
         slug: str,
-        **kwargs: dict[str, Any],
+        **__: dict[str, Any],
     ) -> HttpResponse:
         customer = get_object_or_404(self.model, slug=slug)
         template_name = self.get_template_name()
@@ -42,7 +41,7 @@ class CustomerListView(PermissionRequiredMixin, ListView):
     model = Customer
     filterset_class = CustomerFilterset
     search_fields = ("name", "mobile", "notes")
-    ordering_fields = {
+    ordering_fields: ClassVar[dict[str, str]] = {
         "name": _("name"),
         "total_debit": _("total debit"),
         "total_credit": _("total credit"),

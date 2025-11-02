@@ -7,11 +7,10 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from apps.balance.managers import CustomerManager
 from apps.core.models import AbstractTimestampModel
 from apps.core.signals import slugify_name
 from apps.core.validators import four_char_validator, syrian_mobile_validator
-
-from ..managers import CustomerManager
 
 
 class Customer(AbstractTimestampModel):
@@ -26,7 +25,7 @@ class Customer(AbstractTimestampModel):
     mobile = models.CharField(
         max_length=10,
         verbose_name=_("mobile"),
-        null=True,
+        default="",
         blank=True,
         validators=[
             syrian_mobile_validator,
@@ -49,10 +48,7 @@ class Customer(AbstractTimestampModel):
     objects: CustomerManager = CustomerManager()
 
     def _get_total(self, field: Literal["debit", "credit"]) -> Decimal:
-        return sum(
-            getattr(transaction, field)
-            for transaction in self.transactions.filter(is_deleted=False)
-        )
+        return sum(getattr(transaction, field) for transaction in self.transactions.filter(is_deleted=False))
 
     def get_mobile_url(self):
         return f"tel:+963{self.mobile[1:]}" if self.mobile else "#"
@@ -77,7 +73,7 @@ class Customer(AbstractTimestampModel):
         verbose_name = _("customer")
         verbose_name_plural = _("customers")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 

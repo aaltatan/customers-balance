@@ -1,3 +1,5 @@
+import logging
+
 from .base import *
 
 DATABASES["default"] = {
@@ -7,6 +9,5 @@ DATABASES["default"] = {
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.MD5PasswordHasher",
 ]
-import logging
 
 logging.disable()

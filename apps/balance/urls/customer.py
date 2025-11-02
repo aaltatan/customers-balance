@@ -1,5 +1,6 @@
 from django.urls import path
-from ..views import customer
+
+from apps.balance.views import customer
 
 app_name = "customer"
 
