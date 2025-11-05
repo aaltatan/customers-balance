@@ -1,15 +1,13 @@
-<div
-  class="fixed start-0 left-0 w-screen h-screen bg-white/90 dark:bg-black/90 z-50 px-4 py-12"
-  x-data="modal"
-  x-show="status == 'open'"
-  @showmodal.window="open"
-  @keydown.escape.window="close"
-  x-transition:enter="transition ease-out duration-100"
-  x-transition:enter-start="opacity-50 -translate-y-8"
-  x-transition:enter-end="opacity-100"
-  x-transition:leave="transition ease-in duration-100"
-  x-transition:leave-start="opacity-100"
-  x-transition:leave-end="opacity-50 -translate-y-8"
-  id="modal-container"
->
+<div class="fixed start-0 left-0 w-screen h-screen bg-white/90 dark:bg-black/90 z-50 px-4 py-12"
+     x-data="modal"
+     x-show="status == 'open'"
+     @showmodal.window="open"
+     @keydown.escape.window="close"
+     x-transition:enter="transition ease-out duration-100"
+     x-transition:enter-start="opacity-50 -translate-y-8"
+     x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-100"
+     x-transition:leave-start="opacity-100"
+     x-transition:leave-end="opacity-50 -translate-y-8"
+     id="modal-container">
 </div>
