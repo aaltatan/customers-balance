@@ -8,7 +8,7 @@
   }
 
   .tr {
-    @apply odd:bg-neutral-100 dark:odd:bg-neutral-950;
+    @apply odd:bg-neutral-100 dark:odd:bg-neutral-950 aria-[highlighted]:bg-red-200 aria-[highlighted]:dark:bg-red-900;
   }
 
   .spinner {
