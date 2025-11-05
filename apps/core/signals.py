@@ -17,7 +17,7 @@ class SlugNameModelProtocol(Protocol):
 def slugify_name(
     sender: Any,
     instance: SlugNameModelProtocol,
-    *_: Any,
+    *args: Any,
     **kwargs: dict[str, Any],
 ) -> None:
     slug: str | None = kwargs.get("slug")
