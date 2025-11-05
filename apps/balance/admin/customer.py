@@ -1,6 +1,8 @@
+from django import forms
 from django.contrib import admin
 from django.http import HttpRequest
 
+from apps.balance.managers import CustomerQueryset
 from apps.balance.models import Customer, Transaction
 from apps.balance.services import add_customer, change_customer, delete_customer
 
@@ -35,16 +37,23 @@ class CustomerAdmin(admin.ModelAdmin):
     def get_queryset(self, request: HttpRequest):
         return super().get_queryset(request).annotate_totals()
 
-    def save_model(self, request, obj, form, change):
+    def save_model(
+        self,
+        request: HttpRequest,
+        obj: Customer,
+        form: forms.ModelForm,
+        *,
+        change: bool,
+    ):
         if change:
             change_customer(user=request.user, instance=obj, saver=form)
         else:
             add_customer(user=request.user, saver=form)
 
-    def delete_model(self, request, obj):
+    def delete_model(self, request: HttpRequest, obj: Customer):
         delete_customer(user=request.user, instance=obj)
 
-    def delete_queryset(self, request, queryset):
+    def delete_queryset(self, request: HttpRequest, queryset: CustomerQueryset):
         for obj in queryset:
             delete_customer(user=request.user, instance=obj)
 

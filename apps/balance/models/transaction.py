@@ -86,7 +86,7 @@ class Transaction(AbstractTimestampModel, AbstractSoftDeleteModel):
             raise ValidationError(errors)
 
     def __str__(self) -> str:
-        return f"{self.customer.name}(debit={self.debit:,}, credit={self.credit:,})"
+        return f"{self.customer.name} - [{self.amount}])"
 
     class Meta:
         ordering = ("date",)

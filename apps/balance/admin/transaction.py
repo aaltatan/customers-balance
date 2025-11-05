@@ -1,7 +1,9 @@
+from django import forms
 from django.contrib import admin, messages
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
+from apps.balance.managers import TransactionQueryset
 from apps.balance.models import Transaction
 from apps.balance.services import (
     add_transaction,
@@ -44,21 +46,30 @@ class TransactionAdmin(admin.ModelAdmin):
 
         return qs
 
-    def save_model(self, request, obj, form, change):
+    def save_model(
+        self,
+        request: HttpRequest,
+        obj: Transaction,
+        form: forms.ModelForm,
+        *,
+        change: bool,
+    ):
         if change:
             change_transaction(user=request.user, instance=obj, saver=form)
         else:
             add_transaction(user=request.user, saver=form)
 
-    def delete_model(self, request, obj):
+    def delete_model(self, request: HttpRequest, obj: Transaction):
         delete_transaction(user=request.user, instance=obj)
 
-    def delete_queryset(self, request, queryset):
+    def delete_queryset(
+        self, request: HttpRequest, queryset: TransactionQueryset
+    ):
         for obj in queryset:
             delete_transaction(user=request.user, instance=obj)
 
     @admin.action(description=_("Undelete selected transactions"))
-    def undelete(self, request: HttpRequest, queryset):
+    def undelete(self, request: HttpRequest, queryset: TransactionQueryset):
         for obj in queryset:
             undelete_transaction(user=request.user, instance=obj)
 
@@ -69,7 +80,9 @@ class TransactionAdmin(admin.ModelAdmin):
         )
 
     @admin.action(description=_("Delete PERMANENTLY selected transactions"))
-    def permanently_delete(self, request: HttpRequest, queryset):
+    def permanently_delete(
+        self, request: HttpRequest, queryset: TransactionQueryset
+    ):
         for obj in queryset:
             delete_transaction(user=request.user, instance=obj, permanent=True)
 

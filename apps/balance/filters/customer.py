@@ -2,6 +2,7 @@ from typing import Any
 
 import django_filters as filters
 from django.db import models
+from django.http import HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -42,7 +43,14 @@ class CustomerFilterset(
         choices=IncludeZeroNetChoices.choices,
     )
 
-    def __init__(self, data=None, queryset=None, *, request=None, prefix=None) -> None:
+    def __init__(
+        self,
+        data: dict[str, Any] | None = None,
+        queryset: CustomerQueryset | None = None,
+        *,
+        request: HttpRequest | None = None,
+        prefix: str | None = None,
+    ) -> None:
         if not data:  # initial request
             data = {"include_zero_nets": IncludeZeroNetChoices.NO}
         super().__init__(data, queryset, request=request, prefix=prefix)

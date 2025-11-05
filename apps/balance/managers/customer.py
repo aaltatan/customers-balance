@@ -48,9 +48,9 @@ class CustomerQueryset(models.QuerySet):
         start_date: timezone.datetime | None = None,
         end_date: timezone.datetime | None = None,
     ):
-        return self.annotate_totals(start_date=start_date, end_date=end_date).filter(
-            ~models.Q(transactions_count=0)
-        )
+        return self.annotate_totals(
+            start_date=start_date, end_date=end_date
+        ).filter(~models.Q(transactions_count=0))
 
     def exclude_zero_net(self):
         return self.filter(~models.Q(net=0))
@@ -76,7 +76,9 @@ class CustomerManager(models.Manager):
         start_date: timezone.datetime | None = None,
         end_date: timezone.datetime | None = None,
     ) -> CustomerQueryset:
-        return self.get_queryset().filter_date(start_date=start_date, end_date=end_date)
+        return self.get_queryset().filter_date(
+            start_date=start_date, end_date=end_date
+        )
 
     def exclude_zero_net(self):
         return self.get_queryset().exclude_zero_net()
