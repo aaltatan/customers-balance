@@ -12,8 +12,9 @@ class TransactionListView(PermissionRequiredMixin, ListView):
     paginate_by = 20
 
     def get_initial_queryset(self):
-        return (
-            Transaction.objects.annotate_net()
-            .select_related("customer")
-            .order_by("-date")
-        )
+        queryset = Transaction.objects.annotate_net().select_related("customer")
+
+        if self.request.user.has_perm("balance.view_deleted_transactions"):
+            return queryset
+
+        return queryset.filter(is_deleted=False)

@@ -92,6 +92,9 @@ class Transaction(AbstractTimestampModel, AbstractSoftDeleteModel):
         ordering = ("date",)
         verbose_name = _("transaction")
         verbose_name_plural = _("transactions")
+        permissions = (
+            ("view_deleted_transactions", "Can view deleted transactions"),
+        )
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -106,10 +109,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 
 def slugify_transaction(
-    _: Any,
-    instance: Transaction,
-    *__: Any,
-    **___: dict[str, Any],
+    sender: Any, instance: Transaction, *args: Any, **kwargs: dict[str, Any]
 ) -> None:
     if instance.slug is None:
         instance.slug = instance.uuid.hex

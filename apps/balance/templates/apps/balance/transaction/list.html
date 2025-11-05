@@ -27,10 +27,15 @@
             {% translate "Amount" %}
           </c-table.th>
           <c-table.th>
-            {% translate "Net" %}
-          </c-table.th>
-          <c-table.th>
             {% translate "Notes" %}
+          </c-table.th>
+          {% if perms.balance.view_deleted_transactions %}
+            <c-table.th>
+              {% translate "Is Deleted" %}
+            </c-table.th>
+          {% endif %}
+          <c-table.th>
+            {% translate "Net" %}
           </c-table.th>
         </tr>
       </thead>

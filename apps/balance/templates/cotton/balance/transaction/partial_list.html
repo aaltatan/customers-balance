@@ -4,30 +4,38 @@
   <tr {% if forloop.last and page_obj.has_next %}
         hx-get="{{ index_url }}?page={{ page_obj.next_page_number }}" hx-target="#{{ container_id }}" hx-include="*[data-htmx-include]" hx-swap="beforeend" hx-trigger="revealed"
       {% endif %}
+      {% if obj.is_deleted %}
+        aria-highlighted="true"
+      {% endif %}
       class="tr"
       data-obj-id="{{ obj.pk }}">
-    <c-table.td>
+    <c-table.td fixed="True">
       <input type="checkbox"
              name="obj-{{ obj.pk }}"
              :checked="checkAll" />
     </c-table.td>
-    <c-table.td>
-      {{ obj.date|date:"Y-m-d H:i" }}
+    <c-table.td data-title='{% translate "Date" %}'>
+      {{ obj.date|date:"Y-m-d H:i:s" }}
     </c-table.td>
-    <c-table.td>
+    <c-table.td data-title='{% translate "Customer" %}'>
       <a hx-get="{{ obj.customer.get_absolute_url }}"
          hx-target="#modal-container"
          hx-swap="innerHTML"
          class="hover:underlne cursor-pointer">{{ obj.customer.name }}</a>
     </c-table.td>
-    <c-table.td>
+    <c-table.td data-title='{% translate "Amount" %}'>
       {{ obj.amount|money }}
     </c-table.td>
-    <c-table.td>
-      {{ obj.net|money }}
-    </c-table.td>
-    <c-table.td>
+    <c-table.td data-title='{% translate "Notes" %}'>
       {{ obj.notes }}
+    </c-table.td>
+    {% if perms.balance.view_deleted_transactions %}
+      <c-table.td data-title='{% translate "Is Deleted" %}'>
+        <c-boolean :status="obj.is_deleted" />
+      </c-table.td>
+    {% endif %}
+    <c-table.td data-title='{% translate "Net" %}' fixed="True">
+      {{ obj.net|money }}
     </c-table.td>
   </tr>
 {% empty %}
