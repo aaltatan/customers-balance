@@ -51,7 +51,6 @@ class TransactionAdmin(admin.ModelAdmin):
         request: HttpRequest,
         obj: Transaction,
         form: forms.ModelForm,
-        *,
         change: bool,
     ):
         if change:

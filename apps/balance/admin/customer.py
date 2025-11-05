@@ -42,7 +42,6 @@ class CustomerAdmin(admin.ModelAdmin):
         request: HttpRequest,
         obj: Customer,
         form: forms.ModelForm,
-        *,
         change: bool,
     ):
         if change:
