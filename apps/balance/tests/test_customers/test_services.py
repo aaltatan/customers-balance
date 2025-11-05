@@ -3,11 +3,11 @@ from django.db.models import ProtectedError
 from django.test import TestCase
 from parameterized import parameterized
 
+from apps.balance.forms import CustomerForm
+from apps.balance.models import Customer
+from apps.balance.services import add_customer, change_customer, delete_customer
 from apps.core.models import Activity
 
-from ...forms import CustomerForm
-from ...models import Customer
-from ...services import add_customer, change_customer, delete_customer
 from . import CustomersTestMixin
 
 
@@ -16,7 +16,13 @@ class TestServices(CustomersTestMixin, TestCase):
         [
             ({"name": "Customer5"},),
             ({"name": "Customer6", "notes": "Amazing"},),
-            ({"name": "Customer7", "mobile": "0947302503", "notes": "Amazing"},),
+            (
+                {
+                    "name": "Customer7",
+                    "mobile": "0947302503",
+                    "notes": "Amazing",
+                },
+            ),
         ]
     )
     def test_add_service(self, data: dict[str, str]):
@@ -27,8 +33,8 @@ class TestServices(CustomersTestMixin, TestCase):
             activity_obj = Activity.objects.first()
             ct = ContentType.objects.get_for_model(Customer)
 
-            self.assertEqual(data.get("name", None), obj.name)
-            self.assertEqual(data.get("mobile", None), obj.mobile)
+            self.assertEqual(data.get("name"), obj.name)
+            self.assertEqual(data.get("mobile"), obj.mobile)
             self.assertEqual(data.get("notes", ""), obj.notes)
 
             self.assertEqual(Customer.objects.count(), 5)

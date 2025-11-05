@@ -1,8 +1,9 @@
 from django.test import TestCase
 from parameterized import parameterized
 
-from ...forms import CustomerForm
-from ...models import Customer
+from apps.balance.forms import CustomerForm
+from apps.balance.models import Customer
+
 from . import CustomersTestMixin
 
 
@@ -43,7 +44,8 @@ class TestModels(CustomersTestMixin, TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("mobile", form.errors)
         self.assertIn(
-            "mobile number's pattern must be like 0933222111", form.errors["mobile"]
+            "mobile number's pattern must be like 0933222111",
+            form.errors["mobile"],
         )
 
     def test_update_with_duplicated_name(self):
@@ -53,7 +55,9 @@ class TestModels(CustomersTestMixin, TestCase):
 
         self.assertFalse(form.is_valid())
         self.assertIn("name", form.errors)
-        self.assertIn("Customer with this Name already exists.", form.errors["name"])
+        self.assertIn(
+            "Customer with this Name already exists.", form.errors["name"]
+        )
 
     def test_create_with_duplicated_name(self):
         data = {"name": "Customer1"}
@@ -61,7 +65,9 @@ class TestModels(CustomersTestMixin, TestCase):
 
         self.assertFalse(form.is_valid())
         self.assertIn("name", form.errors)
-        self.assertIn("Customer with this Name already exists.", form.errors["name"])
+        self.assertIn(
+            "Customer with this Name already exists.", form.errors["name"]
+        )
 
     def test_name_less_than_four_chars(self):
         data = {"name": "Aaa"}
@@ -69,7 +75,9 @@ class TestModels(CustomersTestMixin, TestCase):
 
         self.assertFalse(form.is_valid())
         self.assertIn("name", form.errors)
-        self.assertIn("field must be 4 characters at least", form.errors["name"])
+        self.assertIn(
+            "field must be 4 characters at least", form.errors["name"]
+        )
 
     @parameterized.expand([("09445522",), ("5544552233",), ("094455223",)])
     def test_invalid_mobile_pattern(self, mobile: str):
@@ -79,5 +87,6 @@ class TestModels(CustomersTestMixin, TestCase):
         self.assertFalse(form.is_valid())
         self.assertIn("mobile", form.errors)
         self.assertIn(
-            "mobile number's pattern must be like 0933222111", form.errors["mobile"]
+            "mobile number's pattern must be like 0933222111",
+            form.errors["mobile"],
         )

@@ -12,4 +12,8 @@ class TransactionListView(PermissionRequiredMixin, ListView):
     paginate_by = 20
 
     def get_initial_queryset(self):
-        return Transaction.objects.annotate_net().select_related("customer").order_by("-date")
+        return (
+            Transaction.objects.annotate_net()
+            .select_related("customer")
+            .order_by("-date")
+        )

@@ -31,12 +31,12 @@ class TestFilters(TestFiltersSetupMixin, TestCase):
 
     def test_customers_has_right_net(self):
         expected = [
-            Decimal("50_000"),  # Customer 1
-            Decimal("90_000"),  # Customer 2
-            Decimal("0"),  # Customer 3
-            Decimal("0"),  # Customer 4
+            Decimal(50_000),  # Customer 1
+            Decimal(90_000),  # Customer 2
+            Decimal(0),  # Customer 3
+            Decimal(0),  # Customer 4
         ]
-        for customer, expected_net in zip(self.init_qs, expected):
+        for customer, expected_net in zip(self.init_qs, expected, strict=False):
             self.assertEqual(customer.net, expected_net)
 
     def test_filterset_has_initial_exclude_zero_net(self):
@@ -71,50 +71,65 @@ class TestFilters(TestFiltersSetupMixin, TestCase):
         ]
     )
     def test_filter_by_name(self, keyword: str, expected_name: str):
-        filtered_qs = CustomerFilterset(queryset=self.init_qs, data={"name": keyword}).qs
+        filtered_qs = CustomerFilterset(
+            queryset=self.init_qs, data={"name": keyword}
+        ).qs
         self.assertEqual(filtered_qs.count(), 1)
         self.assertEqual(filtered_qs.first().name, expected_name)
 
     @parameterized.expand(
         [
-            ({"total_debit__gte": Decimal("100_000")}, ["Customer 1", "Customer 2"]),
-            ({"total_credit__gte": Decimal("100_000")}, ["Customer 1", "Customer 2"]),
-            ({"total_debit__lte": Decimal("100_000")}, ["Customer 3", "Customer 4"]),
-            ({"net__lte": Decimal("0")}, ["Customer 3", "Customer 4"]),
-            ({"net__gte": Decimal("51_000")}, ["Customer 2"]),
-            ({"total_debit__lte": Decimal("10_000")}, ["Customer 4"]),
-            ({"total_debit__gte": Decimal("500_000")}, []),
-            ({"total_debit__lte": Decimal("-500_000")}, []),
+            (
+                {"total_debit__gte": Decimal(100_000)},
+                ["Customer 1", "Customer 2"],
+            ),
+            (
+                {"total_credit__gte": Decimal(100_000)},
+                ["Customer 1", "Customer 2"],
+            ),
+            (
+                {"total_debit__lte": Decimal(100_000)},
+                ["Customer 3", "Customer 4"],
+            ),
+            ({"net__lte": Decimal(0)}, ["Customer 3", "Customer 4"]),
+            ({"net__gte": Decimal(51_000)}, ["Customer 2"]),
+            ({"total_debit__lte": Decimal(10_000)}, ["Customer 4"]),
+            ({"total_debit__gte": Decimal(500_000)}, []),
+            ({"total_debit__lte": Decimal(-500_000)}, []),
             (
                 {
-                    "total_debit__gte": Decimal("20_000"),
-                    "total_debit__lte": Decimal("200_000"),
+                    "total_debit__gte": Decimal(20_000),
+                    "total_debit__lte": Decimal(200_000),
                 },
                 ["Customer 1", "Customer 3"],
             ),
             (
                 {
-                    "total_debit__gte": Decimal("100_000"),
-                    "total_credit__gte": Decimal("200_000"),
+                    "total_debit__gte": Decimal(100_000),
+                    "total_credit__gte": Decimal(200_000),
                 },
                 ["Customer 2"],
             ),
             (
                 {
-                    "net__lte": Decimal("50_000"),
-                    "total_debit__gte": Decimal("150_000"),
-                    "total_credit__gte": Decimal("150_000"),
+                    "net__lte": Decimal(50_000),
+                    "total_debit__gte": Decimal(150_000),
+                    "total_credit__gte": Decimal(150_000),
                 },
                 ["Customer 1"],
             ),
         ]
     )
-    def test_filter_by_totals_or_net(self, filters: dict[str, Decimal], expected_names: list[str]):
+    def test_filter_by_totals_or_net(
+        self, filters: dict[str, Decimal], expected_names: list[str]
+    ):
         filters.update({"include_zero_nets": IncludeZeroNetChoices.YES})
         filtered_qs = CustomerFilterset(queryset=self.init_qs, data=filters).qs
 
         self.assertEqual(filtered_qs.count(), len(expected_names))
-        self.assertEqual([customer.name for customer in filtered_qs], expected_names)
+        self.assertEqual(
+            [customer.name for customer in filtered_qs], expected_names
+        )
 
     @parameterized.expand(
         [
@@ -123,10 +138,19 @@ class TestFilters(TestFiltersSetupMixin, TestCase):
             ("lte", 0, ["Customer 4"]),
         ]
     )
-    def test_filter_by_transactions_count(self, method: Literal["gte", "lte"], count: int, expected_names: list[str]):
-        filtered_qs = CustomerFilterset(queryset=self.init_qs, data={f"transactions_count__{method}": count}).qs
+    def test_filter_by_transactions_count(
+        self,
+        method: Literal["gte", "lte"],
+        count: int,
+        expected_names: list[str],
+    ):
+        filtered_qs = CustomerFilterset(
+            queryset=self.init_qs, data={f"transactions_count__{method}": count}
+        ).qs
         self.assertEqual(filtered_qs.count(), len(expected_names))
-        self.assertEqual([customer.name for customer in filtered_qs], expected_names)
+        self.assertEqual(
+            [customer.name for customer in filtered_qs], expected_names
+        )
 
     @parameterized.expand(
         [
@@ -177,12 +201,16 @@ class TestFilters(TestFiltersSetupMixin, TestCase):
             ),
         ]
     )
-    def test_filter_by_date(self, data: dict[str, Any], customers: dict[str, CustomerExpectedData]):
+    def test_filter_by_date(
+        self, data: dict[str, Any], customers: dict[str, CustomerExpectedData]
+    ):
         filtered_qs = CustomerFilterset(queryset=self.init_qs, data=data).qs
 
         self.assertEqual(filtered_qs.count(), len(customers))
 
-        for (customer, expected_data), obj in zip(customers.items(), filtered_qs):
+        for (customer, expected_data), obj in zip(
+            customers.items(), filtered_qs, strict=False
+        ):
             self.assertEqual(customer, obj.name)
             self.assertEqual(obj.total_debit, expected_data.total_debit)
             self.assertEqual(obj.total_credit, expected_data.total_credit)

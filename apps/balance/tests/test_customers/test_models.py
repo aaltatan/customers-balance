@@ -4,7 +4,8 @@ from django.db.utils import IntegrityError
 from django.test import TestCase
 from parameterized import parameterized
 
-from ...models import Customer
+from apps.balance.models import Customer
+
 from . import CustomersTestMixin
 
 
@@ -22,9 +23,21 @@ class TestModels(CustomersTestMixin, TestCase):
 
     @parameterized.expand(
         [
-            ("Customer1", Decimal("30000"), Decimal("30000"), Decimal("0"), 3),
-            ("Customer2", Decimal("100000"), Decimal("25000"), Decimal("75000"), 3),
-            ("Customer3", Decimal("150000"), Decimal("85000"), Decimal("65000"), 4),
+            ("Customer1", Decimal(30000), Decimal(30000), Decimal(0), 3),
+            (
+                "Customer2",
+                Decimal(100000),
+                Decimal(25000),
+                Decimal(75000),
+                3,
+            ),
+            (
+                "Customer3",
+                Decimal(150000),
+                Decimal(85000),
+                Decimal(65000),
+                4,
+            ),
         ]
     )
     def test_totals(
@@ -45,12 +58,12 @@ class TestModels(CustomersTestMixin, TestCase):
     def test_annotate_totals(self):
         qs = Customer.objects.annotate_totals().order_by("name").all()
         data = [
-            (Decimal("30000"), Decimal("30000"), Decimal("0"), 3),
-            (Decimal("100000"), Decimal("25000"), Decimal("75000"), 3),
-            (Decimal("150000"), Decimal("85000"), Decimal("65000"), 4),
+            (Decimal(30000), Decimal(30000), Decimal(0), 3),
+            (Decimal(100000), Decimal(25000), Decimal(75000), 3),
+            (Decimal(150000), Decimal(85000), Decimal(65000), 4),
         ]
 
-        for row in zip(qs, data):
+        for row in zip(qs, data, strict=False):
             customer, expected = row
             total_debit, total_credit, net, transactions_count = expected
             self.assertEqual(customer.total_debit, total_debit)
