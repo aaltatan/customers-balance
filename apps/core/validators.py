@@ -6,7 +6,9 @@ from django.core.validators import (
 )
 from django.utils.translation import gettext_lazy as _
 
-four_char_validator = MinLengthValidator(4, _("field must be 4 characters at least"))
+four_char_validator = MinLengthValidator(
+    4, _("field must be 4 characters at least")
+)
 syrian_mobile_validator = RegexValidator(
     r"^09\d{8}$", _("mobile number's pattern must be like 0933222111")
 )

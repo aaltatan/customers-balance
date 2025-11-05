@@ -12,7 +12,9 @@ def add_transaction(user: User, saver: Saveable[Transaction]) -> Transaction:
     return add_instance(user, saver)
 
 
-def change_transaction(user: User, instance: Transaction, saver: Saveable[Transaction]) -> Transaction:
+def change_transaction(
+    user: User, instance: Transaction, saver: Saveable[Transaction]
+) -> Transaction:
     return change_instance(
         user=user,
         instance=instance,
@@ -22,7 +24,9 @@ def change_transaction(user: User, instance: Transaction, saver: Saveable[Transa
 
 
 @transaction.atomic
-def delete_transaction(user: User, instance: Transaction, *, permanent: bool = False) -> None:
+def delete_transaction(
+    user: User, instance: Transaction, *, permanent: bool = False
+) -> None:
     data = TransactionSerializer(instance).data
     instance_pk = instance.pk
 

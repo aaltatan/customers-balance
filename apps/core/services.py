@@ -31,8 +31,8 @@ def change_instance(
     saver: Saveable[ModelType],
     instance: ModelType,
 ) -> ModelType:
-    Model = instance.__class__
-    old_instance = Model.objects.get(pk=instance.pk)
+    model = instance.__class__
+    old_instance = model.objects.get(pk=instance.pk)
 
     old_instance_data = serializer_class(old_instance).data
 

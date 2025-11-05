@@ -26,7 +26,9 @@ def slugify_name(
 
     model = instance.__class__
 
-    slug_exists = model.objects.filter(slug=slug).exclude(pk=instance.pk).exists()
+    slug_exists = (
+        model.objects.filter(slug=slug).exclude(pk=instance.pk).exists()
+    )
 
     if slug_exists:
         slug = increase_slug_by_one(slug)

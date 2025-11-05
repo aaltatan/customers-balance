@@ -48,7 +48,10 @@ class Customer(AbstractTimestampModel):
     objects: CustomerManager = CustomerManager()
 
     def _get_total(self, field: Literal["debit", "credit"]) -> Decimal:
-        return sum(getattr(transaction, field) for transaction in self.transactions.filter(is_deleted=False))
+        return sum(
+            getattr(transaction, field)
+            for transaction in self.transactions.filter(is_deleted=False)
+        )
 
     def get_mobile_url(self):
         return f"tel:+963{self.mobile[1:]}" if self.mobile else "#"

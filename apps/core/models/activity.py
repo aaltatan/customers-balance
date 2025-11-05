@@ -8,7 +8,12 @@ from .user import User
 
 class ActivityManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().select_related("user", "content_type").prefetch_related("content_object")
+        return (
+            super()
+            .get_queryset()
+            .select_related("user", "content_type")
+            .prefetch_related("content_object")
+        )
 
 
 class Activity(models.Model):

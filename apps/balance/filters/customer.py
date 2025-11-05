@@ -26,8 +26,12 @@ class CustomerFilterset(
     filters.FilterSet,
 ):
     name = get_text_filter()
-    transactions_count__gte = filters.NumberFilter(field_name="transactions_count", lookup_expr="gte")
-    transactions_count__lte = filters.NumberFilter(field_name="transactions_count", lookup_expr="lte")
+    transactions_count__gte = filters.NumberFilter(
+        field_name="transactions_count", lookup_expr="gte"
+    )
+    transactions_count__lte = filters.NumberFilter(
+        field_name="transactions_count", lookup_expr="lte"
+    )
     total_debit__gte, total_debit__lte = get_decimal_range_filter()
     total_credit__gte, total_credit__lte = get_decimal_range_filter()
     net__gte, net__lte = get_decimal_range_filter()
@@ -51,7 +55,9 @@ class CustomerFilterset(
 
         return date
 
-    def filter_date(self, qs: CustomerQueryset, _: str, __: dict[str, Any]) -> CustomerQueryset:
+    def filter_date(
+        self, qs: CustomerQueryset, _: str, __: dict[str, Any]
+    ) -> CustomerQueryset:
         try:
             start_date = self._parse_date("date__gte")
             end_date = self._parse_date("date__lte")
@@ -59,7 +65,9 @@ class CustomerFilterset(
         except ValueError:
             return qs.none()
 
-    def filter_include_zero_nets(self, qs: CustomerQueryset, _: str, value: str) -> CustomerQueryset:
+    def filter_include_zero_nets(
+        self, qs: CustomerQueryset, _: str, value: str
+    ) -> CustomerQueryset:
         if value == IncludeZeroNetChoices.NO:
             return qs.filter(~models.Q(net=0))
 

@@ -10,7 +10,9 @@ class SearchFilterMixin:
     search_fields: tuple[str, ...] | None = None
 
     def get_search_filterset_class(self):
-        if getattr(self, "search_filter_class", None) and isinstance(self.search_filter_class, filters.FilterSet):
+        if getattr(self, "search_filter_class", None) and isinstance(
+            self.search_filter_class, filters.FilterSet
+        ):
             return self.search_filter_class
 
         class SearchFilter(BaseQSearchFilter):
@@ -33,7 +35,9 @@ class OrderingFilterMixin:
             message = "you must define the ordering_fields attribute."
             raise AttributeError(message)
 
-        if getattr(self, "ordering_filter_class", None) and isinstance(self.ordering_filter_class, filters.FilterSet):
+        if getattr(self, "ordering_filter_class", None) and isinstance(
+            self.ordering_filter_class, filters.FilterSet
+        ):
             return self.ordering_filter_class
 
         class OrderingFilter(filters.FilterSet):

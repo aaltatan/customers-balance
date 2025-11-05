@@ -23,7 +23,9 @@ class FilterTextMixin:
 
 
 class FilterStringDecimalMixin:
-    def filter_string_decimal(self, qs: QuerySet, name: str, value: str) -> QuerySet:
+    def filter_string_decimal(
+        self, qs: QuerySet, name: str, value: str
+    ) -> QuerySet:
         number = parse_decimal(value)
         return qs.filter(**{name: number})
 
@@ -49,7 +51,9 @@ class BaseQSearchFilter(filters.FilterSet):
         value: str,
     ) -> QuerySet:
         """Search the queryset for the given name and value."""
-        return queryset.annotate(search=annotate_search(*self.search_fields)).filter(get_keywords_query(value))
+        return queryset.annotate(
+            search=annotate_search(*self.search_fields)
+        ).filter(get_keywords_query(value))
 
 
 class CustomOrderingFilter(filters.OrderingFilter):

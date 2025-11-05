@@ -8,7 +8,9 @@ from django.utils import timezone
 from apps.core.dbfields import MoneyField
 
 
-def get_transactions_total_field(fieldname: Literal["debit", "credit", "amount"], query: models.Q) -> Coalesce:
+def get_transactions_total_field(
+    fieldname: Literal["debit", "credit", "amount"], query: models.Q
+) -> Coalesce:
     return Coalesce(
         models.Sum(models.F(f"transactions__{fieldname}"), filter=query),
         0,
@@ -32,7 +34,9 @@ class CustomerQueryset(models.QuerySet):
             query &= models.Q(transactions__date__lte=end_date + nearly_day)
 
         return self.annotate(
-            transactions_count=models.Count(models.F("transactions__debit"), filter=query),
+            transactions_count=models.Count(
+                models.F("transactions__debit"), filter=query
+            ),
             total_debit=get_transactions_total_field("debit", query),
             total_credit=get_transactions_total_field("credit", query),
             net=get_transactions_total_field("amount", query),
@@ -44,7 +48,9 @@ class CustomerQueryset(models.QuerySet):
         start_date: timezone.datetime | None = None,
         end_date: timezone.datetime | None = None,
     ):
-        return self.annotate_totals(start_date=start_date, end_date=end_date).filter(~models.Q(transactions_count=0))
+        return self.annotate_totals(start_date=start_date, end_date=end_date).filter(
+            ~models.Q(transactions_count=0)
+        )
 
     def exclude_zero_net(self):
         return self.filter(~models.Q(net=0))
@@ -60,7 +66,9 @@ class CustomerManager(models.Manager):
         start_date: datetime | None = None,
         end_date: datetime | None = None,
     ) -> CustomerQueryset:
-        return self.get_queryset().annotate_totals(start_date=start_date, end_date=end_date)
+        return self.get_queryset().annotate_totals(
+            start_date=start_date, end_date=end_date
+        )
 
     def filter_date(
         self,

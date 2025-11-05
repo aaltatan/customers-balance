@@ -32,7 +32,11 @@ def _format_string(
             value=value,
         )
 
-    return format_html("<pre {text_color} class='font-medium'>{value}</pre>", text_color=text_color, value=value)
+    return format_html(
+        "<pre {text_color} class='font-medium'>{value}</pre>",
+        text_color=text_color,
+        value=value,
+    )
 
 
 @register.filter

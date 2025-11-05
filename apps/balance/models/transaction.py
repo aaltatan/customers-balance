@@ -67,12 +67,20 @@ class Transaction(AbstractTimestampModel, AbstractSoftDeleteModel):
         errors: dict[str, ValidationError] = {}
 
         if self.debit == 0 and self.credit == 0:
-            errors["debit"] = ValidationError(_("both debit and credit cannot be zero."))
-            errors["credit"] = ValidationError(_("both debit and credit cannot be zero."))
+            errors["debit"] = ValidationError(
+                _("both debit and credit cannot be zero.")
+            )
+            errors["credit"] = ValidationError(
+                _("both debit and credit cannot be zero.")
+            )
 
         if self.debit != 0 and self.credit != 0:
-            errors["debit"] = ValidationError(_("both debit and credit cannot be filled."))
-            errors["credit"] = ValidationError(_("both debit and credit cannot be filled."))
+            errors["debit"] = ValidationError(
+                _("both debit and credit cannot be filled.")
+            )
+            errors["credit"] = ValidationError(
+                _("both debit and credit cannot be filled.")
+            )
 
         if errors:
             raise ValidationError(errors)

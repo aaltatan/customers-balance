@@ -29,7 +29,9 @@ class AbstractSoftDeleteModel(models.Model):
         self.is_deleted = False
         self.save()
 
-    def delete(self, using=None, *, keep_parents=False, permanent=False):
+    def delete(
+        self, using=None, *, keep_parents: bool = False, permanent: bool = False
+    ):
         if permanent:
             super().delete(using=using, keep_parents=keep_parents)
         else:
