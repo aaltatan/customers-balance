@@ -1,7 +1,15 @@
-<c-vars :centered="False" />
-<td class="p-2
-           {% if centered %}
-             text-center
-           {% endif %}"
-    {{ attrs }}>{{ slot }}
+<c-vars :centered="False"
+        :fixed="False" />
+<td class="{% spaceless %}
+             {% if not fixed %}
+               max-lg:flex gap-4 before:font-medium before:capitalize max-lg:before:content-[attr(data-title)':']
+             {% else %}
+               p-2
+             {% endif %}
+             {% if centered %}
+               items-center
+             {% endif %}
+           {% endspaceless %}"
+    {{ attrs }}>
+  <span>{{ slot }}</span>
 </td>
