@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -30,7 +32,11 @@ class AbstractSoftDeleteModel(models.Model):
         self.save()
 
     def delete(
-        self, using=None, *, keep_parents: bool = False, permanent: bool = False
+        self,
+        using: Any = None,
+        *,
+        keep_parents: bool = False,
+        permanent: bool = False,
     ):
         if permanent:
             super().delete(using=using, keep_parents=keep_parents)
