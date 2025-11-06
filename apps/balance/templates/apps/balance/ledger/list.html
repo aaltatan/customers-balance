@@ -1,0 +1,39 @@
+{% load i18n %}
+
+<c-layout page_title='{% translate "Ledger" %}: {{ customer.name }}'>
+  <div class="border border-neutral-200 dark:border-neutral-800 rounded-md my-2 overflow-hidden">
+    <table class="w-full table-auto"
+           x-data="{checkAll: false}">
+      <thead>
+        <tr>
+          <c-table.th>
+            <input type="checkbox"
+                   name="check-all"
+                   id="check-all"
+                   x-model="checkAll" />
+          </c-table.th>
+          <c-table.th>
+            {% translate "Date" %}
+          </c-table.th>
+          <c-table.th>
+            {% translate "Amount" %}
+          </c-table.th>
+          <c-table.th>
+            {% translate "Notes" %}
+          </c-table.th>
+          {% if perms.balance.view_deleted_transactions %}
+            <c-table.th>
+              {% translate "Is Deleted" %}
+            </c-table.th>
+          {% endif %}
+          <c-table.th>
+            {% translate "Net" %}
+          </c-table.th>
+        </tr>
+      </thead>
+      <tbody id="{{ container_id }}">
+        <c-balance.ledger.partial-list />
+      </tbody>
+    </table>
+  </div>
+</c-layout>
