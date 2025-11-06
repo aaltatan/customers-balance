@@ -18,9 +18,7 @@
       {{ obj.date|date:"Y-m-d H:i:s" }}
     </c-table.td>
     <c-table.td data-title='{% translate "Customer" %}'>
-      <a hx-get="{{ obj.customer.get_absolute_url }}"
-         hx-target="#modal-container"
-         hx-swap="innerHTML"
+      <a href="{{ obj.customer.get_ledger_url }}"
          class="hover:underlne cursor-pointer">{{ obj.customer.name }}</a>
     </c-table.td>
     <c-table.td data-title='{% translate "Amount" %}'>

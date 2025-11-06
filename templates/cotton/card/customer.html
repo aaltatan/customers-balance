@@ -2,7 +2,10 @@
 
 <div class="p-4 border border-neutral-200 dark:border-neutral-800 rounded-md bg-white dark:bg-neutral-950 space-y-1">
   <h2 class="text-lg font-medium flex items-center justify-between gap-2">
-    <span>{{ customer.name }}</span>
+    <a hx-get="{{ customer.get_absolute_url }}"
+       hx-target="#modal-container"
+       hx-swap="innerHTML"
+       class="hover:underlne cursor-pointer">{{ customer.name }}</a>
     <span>{{ customer.net|money }}</span>
   </h2>
 </div>
