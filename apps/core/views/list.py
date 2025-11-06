@@ -3,7 +3,7 @@ from typing import Any
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse
 from django.views import View
 from django.views.generic.list import MultipleObjectMixin
 from django_filters import FilterSet
@@ -25,9 +25,10 @@ class ListView(
     View,
 ):
     filterset_class: type[FilterSet] | None = None
-    paginate_by = 10
+    paginate_by = 20
     add_search_filterset: bool = True
     add_ordering_filterset: bool = True
+    index_url: str | None = None
 
     def get(
         self, request: HttpRequest, *_: Any, **__: dict[str, Any]
@@ -77,6 +78,12 @@ class ListView(
         filterset = self.get_ordering_filterset_class()
         return filterset(self.request.GET, queryset, request=self.request)
 
+    def get_index_url(self):
+        if self.index_url is not None and isinstance(self.index_url, str):
+            return self.index_url
+
+        return reverse(f"{self.get_app_label()}:{self.get_model_name()}:index")
+
     def get_template_name(self):
         app_label = self.get_app_label()
         model_name = self.get_model_name()
@@ -96,8 +103,8 @@ class ListView(
 
         return self.paginate_by
 
-    def get_context_data(self, **kwargs: dict[str, Any]):
-        context = {**kwargs}
+    def get_context_data(self, **kwargs: Any):
+        context = kwargs
 
         queryset = self.get_queryset()
 
@@ -116,7 +123,7 @@ class ListView(
                 "is_paginated": is_paginated,
                 "object_list": queryset,
                 "container_id": f"{app_label}-{model_name}-container",
-                "index_url": reverse_lazy(f"{app_label}:{model_name}:index"),
+                "index_url": self.get_index_url(),
             },
         )
 
