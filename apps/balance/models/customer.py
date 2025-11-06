@@ -71,6 +71,9 @@ class Customer(AbstractTimestampModel):
     def get_absolute_url(self):
         return reverse("balance:customer:detail", kwargs={"slug": self.slug})
 
+    def get_ledger_url(self):
+        return reverse("balance:transaction:ledger", kwargs={"slug": self.slug})
+
     class Meta:
         ordering = ("name",)
         verbose_name = _("customer")
