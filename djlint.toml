@@ -1,0 +1,8 @@
+profile = "django"
+blank_line_after_tag = "load,extends,include"
+custom_html = "c-\\w+"
+format_attribute_template_tags = true
+line_break_after_multiline_tag = true
+max_attribute_length = 10
+use_gitignore = true
+ignore = "H008,H016,H030,H031"
