@@ -12,6 +12,15 @@ declare global {
   }
 }
 
+// htmx configurations
+document.addEventListener("htmx:load", () => {
+  htmx.config.defaultSwapStyle = "outerHTML";
+  htmx.config.globalViewTransitions = true;
+  htmx.config.refreshOnHistoryMiss = true;
+  htmx.config.historyCacheSize = 0;
+  htmx.config.historyRestoreAsHxRequest = false;
+});
+
 Alpine.plugin(persist);
 Alpine.plugin(mask);
 
