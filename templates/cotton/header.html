@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<header class="sticky top-2 start-0 p-4 mb-2 z-40 rounded-md bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800">
+<header class="sticky top-0 start-0 px-6 py-4 mb-2 z-40 bg-white dark:bg-black border-b border-neutral-200 dark:border-neutral-900">
   <nav class="flex justify-between items-center">
     <h1 class="text-xl tracking-tighter font-medium">
       <a href="{% url 'balance:customer:index' %}">
@@ -16,13 +16,13 @@
                 title='{% translate "Toggle Theme" %}'>
         <c-slot name="icon">
           <div x-show="theme === 'light'">
-            <c-tablericon.sun class="size-6" />
+            <c-tablericon.sun class="size-5" />
           </div>
           <div x-show="theme === 'dark'">
-            <c-tablericon.moon class="size-6" />
+            <c-tablericon.moon class="size-5" />
           </div>
           <div x-show="theme === 'system'">
-            <c-tablericon.brightness class="size-6" />
+            <c-tablericon.brightness class="size-5" />
           </div>
         </c-slot>
       </c-button>

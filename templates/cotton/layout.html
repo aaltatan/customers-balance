@@ -9,10 +9,12 @@
     <c-head />
   </head>
   <body x-data="body('{{ page_title }}')"
-        class="bg-white dark:bg-black text-neutral-900 dark:text-neutral-100 p-2 mx-auto container"
+        class="bg-white dark:bg-black text-neutral-900 dark:text-neutral-200"
         hx-indicator="*[data-indicator]">
     <c-modal.container />
     <c-header />
-    {{ slot }}
+    <main class="max-w-4xl p-4 mx-auto">
+      {{ slot }}
+    </main>
   </body>
 </html>
