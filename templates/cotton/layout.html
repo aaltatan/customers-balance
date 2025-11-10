@@ -9,6 +9,7 @@
     <c-head />
   </head>
   <body x-data="body('{{ page_title }}')"
+        hx-headers='{ "X-CSRFToken": "{{ csrf_token }}" }'
         class="bg-white dark:bg-black text-neutral-900 dark:text-neutral-200"
         hx-indicator="*[data-indicator]">
     <c-modal.container />
