@@ -7,7 +7,7 @@
             {{ attrs }}>
       {% for value, label in field.field.choices %}
         <option value="{{ value }}"
-                {% if value in field.value %}
+                {% if value == field.value %}
                   selected
                 {% endif %}>
           {{ label }}
