@@ -3,7 +3,13 @@ from django import forms
 from apps.balance.models import Transaction
 
 
-class TransactionForm(forms.ModelForm):
+class DebitTransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = ("date", "debit", "credit", "customer", "notes")
+        fields = ("debit", "customer", "notes")
+
+
+class CreditTransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ("credit", "customer", "notes")

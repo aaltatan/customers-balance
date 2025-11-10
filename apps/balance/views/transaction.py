@@ -4,8 +4,9 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
+from apps.balance.forms import CreditTransactionForm, DebitTransactionForm
 from apps.balance.models import Customer, Transaction
-from apps.core.views import ListView
+from apps.core.views import CreateView, ListView
 
 
 class TransactionListView(PermissionRequiredMixin, ListView):
@@ -21,6 +22,46 @@ class TransactionListView(PermissionRequiredMixin, ListView):
             return queryset
 
         return queryset.filter(is_deleted=False)
+
+
+class DebitTransactionCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = "balance.add_transaction"
+    form_class = DebitTransactionForm
+    template_name = "apps/balance/transaction/create.html"
+    partial_template_name = "cotton/balance/transaction/modal_create_debit.html"
+
+    def get_initial(self) -> dict[str, Any]:
+        customer_slug = self.request.resolver_match.kwargs["customer_slug"]
+        customer = get_object_or_404(Customer, slug=customer_slug)
+        return {"customer": customer}
+
+    def get_create_url(self):
+        customer_slug = self.request.resolver_match.kwargs["customer_slug"]
+        return reverse(
+            "balance:transaction:create-debit",
+            kwargs={"customer_slug": customer_slug},
+        )
+
+
+class CreditTransactionCreateView(PermissionRequiredMixin, CreateView):
+    permission_required = "balance.add_transaction"
+    form_class = CreditTransactionForm
+    template_name = "apps/balance/transaction/create.html"
+    partial_template_name = (
+        "cotton/balance/transaction/modal_create_credit.html"
+    )
+
+    def get_initial(self) -> dict[str, Any]:
+        customer_slug = self.request.resolver_match.kwargs["customer_slug"]
+        customer = get_object_or_404(Customer, slug=customer_slug)
+        return {"customer": customer, "credit": customer.get_net()}
+
+    def get_create_url(self):
+        customer_slug = self.request.resolver_match.kwargs["customer_slug"]
+        return reverse(
+            "balance:transaction:create-credit",
+            kwargs={"customer_slug": customer_slug},
+        )
 
 
 class LedgerListView(PermissionRequiredMixin, ListView):

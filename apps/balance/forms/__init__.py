@@ -1,7 +1,8 @@
 from .customer import CustomerForm
-from .transaction import TransactionForm
+from .transaction import CreditTransactionForm, DebitTransactionForm
 
 __all__ = [
+    "CreditTransactionForm",
     "CustomerForm",
-    "TransactionForm",
+    "DebitTransactionForm",
 ]

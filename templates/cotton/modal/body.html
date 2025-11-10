@@ -1,10 +1,13 @@
-<c-vars title="modal" />
-<div @click.away="close">
+<c-vars title="modal"
+        :close_on_click_outside="True" />
+<div {% if close_on_click_outside %}
+       @click.away="close"
+     {% endif %}>
   <header class="flex justify-between items-center px-4 py-2 bg-white dark:bg-black border-b border-neutral-200 dark:border-neutral-900">
     <h1>
       {{ title }}
     </h1>
-    <c-button @click="close">
+    <c-button @click.prevent="close">
       <c-slot name="icon">
         <c-tablericon.x class="size-5" />
       </c-slot>
@@ -14,7 +17,7 @@
     {{ slot }}
   </main>
   {% if footer %}
-    <footer class="px-4 py-2 bg-white dark:bg-black border-t border-neutral-200 dark:border-neutral-900">
+    <footer class="px-4 py-2 bg-white dark:bg-black border-t border-neutral-200 dark:border-neutral-900 flex items-center gap-2 justify-end">
       {{ footer }}
     </footer>
   {% endif %}

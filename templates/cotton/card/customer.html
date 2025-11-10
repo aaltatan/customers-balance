@@ -5,7 +5,21 @@
     <a hx-get="{{ customer.get_absolute_url }}"
        hx-target="#modal-container"
        hx-swap="innerHTML"
-       class="hover:underlne cursor-pointer">{{ customer.name }}</a>
+       class="hover:underline cursor-pointer">
+      {{ customer.name }}
+    </a>
+    <a hx-get="{{ customer.get_create_debit_url }}"
+       hx-target="#modal-container"
+       hx-swap="innerHTML"
+       class="hover:underline cursor-pointer">
+      {% translate "Add debit transaction" %}
+    </a>
+    <a hx-get="{{ customer.get_create_credit_url }}"
+       hx-target="#modal-container"
+       hx-swap="innerHTML"
+       class="hover:underline cursor-pointer">
+      {% translate "Add credit transaction" %}
+    </a>
     <span>{{ customer.net|money }}</span>
   </h2>
 </div>
