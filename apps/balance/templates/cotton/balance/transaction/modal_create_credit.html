@@ -2,10 +2,10 @@
 
 <c-modal>
   <c-forms.container hx-post="{{ create_url }}">
-    <c-modal.body title='{% translate "Add new credit transaction" %}' :close_on_click_outside="False">
+    <c-modal.body title='{% translate "Add new credit transaction" %}' :close_on_click_outside="False" x-trap.noautofocus="true">
       <div class="space-y-2">
         <c-inputs.select :field="form.customer" label='{% translate "Customer" %}' />
-        <c-inputs.input :field="form.credit" label='{% translate "Credit" %}' autofocus="true" type="number" placeholder='{% translate "e.g. 100.00" %}' />
+        <c-inputs.input :field="form.credit" label='{% translate "Debit" %}' type="number" placeholder='{% translate "e.g. 100.00" %}' />
         <c-inputs.input :field="form.notes" label='{% translate "Notes" %}' placeholder='{% translate "e.g. Cash pill" %}' />
       </div>
       <c-slot name="footer">

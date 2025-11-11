@@ -2,7 +2,8 @@
         :close_on_click_outside="True" />
 <div {% if close_on_click_outside %}
        @click.away="close"
-     {% endif %}>
+     {% endif %}
+     {{ attrs }}>
   <header class="flex justify-between items-center px-4 py-2 bg-white dark:bg-black border-b border-neutral-200 dark:border-neutral-900">
     <h1>
       {{ title }}
